@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Form view per creazione rapida al volo -->
+    <record id="view_sale_zone_form" model="ir.ui.view">
+        <field name="name">sale.zone.form</field>
+        <field name="model">sale.zone</field>
+        <field name="arch" type="xml">
+            <form string="Zona commerciale">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="region"/>
+                        <field name="province"/>
+                        <field name="active"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- List view -->
+    <record id="view_sale_zone_list" model="ir.ui.view">
+        <field name="name">sale.zone.list</field>
+        <field name="model">sale.zone</field>
+        <field name="arch" type="xml">
+            <list string="Zone commerciali">
+                <field name="name"/>
+                <field name="region"/>
+                <field name="province"/>
+            </list>
+        </field>
+    </record>
+
+</odoo>

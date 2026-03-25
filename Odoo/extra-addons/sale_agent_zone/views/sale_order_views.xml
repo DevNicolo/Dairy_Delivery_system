@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Form ordine/preventivo: aggiunge agenti e zona sotto il campo partner -->
+    <record id="view_sale_order_form_agent_zone" model="ir.ui.view"> <!-- definizione di una vista (serve per chiamarla poi -->
+        <field name="name">sale.order.form.agent.zone</field>   <!-- nome della vista -->
+        <field name="model">sale.order</field>              <!-- modello a cui si applica la vista -->
+        <field name="inherit_id" ref="sale.view_order_form"/> <!-- extends della vista del form di sale -->
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="order_agent_id"
+                       string="Agente"
+                       options="{'no_quick_create': True}"/>
+                <field name="zone_id"
+                       string="Zona commerciale"
+                       options="{'no_open': False, 'no_quick_create': False}"
+                       readonly="True"/>
+                <field name="vehicle_id"
+                       string="Mezzo"
+                       options="{'no_open': False, 'no_quick_create': False}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Vista lista preventivi: aggiunge colonne agenti e zona -->
+    <record id="view_preventivi_list" model="ir.ui.view">
+        <field name="name">sale.order.list.preventivi</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_quotation_tree_with_onboarding"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="order_agent_id"
+                       string="Agente"
+                       optional="show"/>
+                <field name="zone_id"
+                       string="Zona"
+                       optional="show"/>
+                <field name="vehicle_id"
+                       string="Mezzo"
+                       optional="show"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Vista lista ordini: aggiunge colonne agenti e zona -->
+    <record id="view_ordini_list" model="ir.ui.view">
+        <field name="name">sale.order.list.ordini</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.sale_order_list_upload"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="order_agent_id"
+                       string="Agente"
+                       optional="show"/>
+                <field name="zone_id"
+                       string="Zona"
+                       optional="show"/>
+                <field name="vehicle_id"
+                       string="Mezzo"
+                       optional="show"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

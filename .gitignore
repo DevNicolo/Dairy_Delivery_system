@@ -1,0 +1,10 @@
+# Python / Odoo
+__pycache__/
+*.py[cod]
+.venv/
+*.pyc
+
+# Environment & Secrets
+.env
+*.log
+.vscode/
