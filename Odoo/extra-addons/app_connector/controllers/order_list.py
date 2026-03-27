@@ -40,6 +40,7 @@ class OrderListAPI(http.Controller):
                 'partner_id': o.partner_id.name,  
                 'date_order': o.date_order,
                 'zone_id': o.zone_id.name,
+                'vehicle_id': o.vehicle_id.name,
                 'prodotti': linee_prodotti,
             })
 
