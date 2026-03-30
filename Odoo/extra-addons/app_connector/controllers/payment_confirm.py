@@ -14,6 +14,7 @@ def register_payment(invoice_id, payment_method, amount):
         if invoice.state != 'posted':
             return {"status": "error", "message": "Invoice must be posted before registering payment"}
         
+        # Create a payment register record and confirm the payment in one step to ensure the invoice's payment state is updated correctly
         payment_registered = request.env['account.payment.register'].with_context(
             active_model='account.move',
             active_ids=[invoice.id]
@@ -38,10 +39,6 @@ class PaymentConfirmAPI(http.Controller):
     @http.route('/api/post_confirm_payment', type='json', auth='jwt', methods=['POST'], csrf=False)
     def confirm_payment(self, **kw):
         try:
-            """
-            Questa rotta è ora protetta. 
-            Richiede un Header 'Authorization: Bearer <token>'
-            """
             invoice_id = kw.get('invoice_id')
             payment_method = kw.get('payment_method')
             amount = kw.get('amount')

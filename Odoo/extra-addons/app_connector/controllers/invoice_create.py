@@ -48,10 +48,6 @@ class InvoiceCreateAPI(http.Controller):
     @http.route('/api/post_create_invoice', type='json', auth='jwt', methods=['POST'], csrf=False)
     def create_invoice(self, **kw):
         try:
-            """
-            Questa rotta è ora protetta. 
-            Richiede un Header 'Authorization: Bearer <token>'
-            """
             order_id = kw.get('order_id')
         
             if not order_id:
@@ -59,8 +55,9 @@ class InvoiceCreateAPI(http.Controller):
 
             invoice = generate_invoice(order_id)
             
+            # Return the error response from generate_invoice
             if invoice.get('status') != 'success':
-                return invoice  # Return the error response from generate_invoice
+                return invoice  
             
             invoice_id = invoice.get('invoice_id')
             

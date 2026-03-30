@@ -13,6 +13,7 @@ def confirm_order(order_id):
 
         order.action_confirm()
         
+        # get the latest picking associated with the order that is not cancelled
         pickings = order.picking_ids.filtered(lambda p: p.state != 'cancel').sorted('id')
         picking_id = pickings[-1].id if pickings else False
         
@@ -28,6 +29,7 @@ def confirm_order(order_id):
     
 def order_delivery(picking_id, vehicle_id):
     try:
+        # get the picking record and ensure it's not cancelled
         picking = request.env['stock.picking'].search([
                         ('id', '=', picking_id),
                         ('state', '!=', 'cancel')],
@@ -36,8 +38,8 @@ def order_delivery(picking_id, vehicle_id):
         if not picking.exists():
             return {"status": "error", "message": "Picking not found"}
 
-        picking.location_id = vehicle_id  # Associa il magazzino (veicolo)
-        picking.button_validate()  # Conferma la consegna
+        picking.location_id = vehicle_id  # assign the vehicle to the picking
+        picking.button_validate()  # convalidate the picking
 
         return {
             "status": "success",
@@ -51,21 +53,17 @@ def order_delivery(picking_id, vehicle_id):
 class OrderConfirmAPI(http.Controller):
 
     @http.route('/api/post_confirm_order', type='json', auth='jwt', methods=['POST'], csrf=False)
-    def confirm_order(self, **kw):      #name has to change to avoid conflict with the function confirm_order defined above
+    def post_confirm_order(self, **kw):
         try:
-            """
-            Questa rotta è ora protetta. 
-            Richiede un Header 'Authorization: Bearer <token>'
-            """
             order_id = kw.get('order_id')
             vehicle_id = kw.get('vehicle_id')
             
             order_confirmed = confirm_order(order_id)
             
-            if order_confirmed.get("status") != "success":   #Restituisce l'errore se la conferma dell'ordine fallisce
+            if order_confirmed.get("status") != "success":   # Check if order confirmation was successful before proceeding to delivery
                 return order_confirmed  
+            picking_id = order_confirmed.get('picking_id')  # get the picking_id from the order confirmation result
             
-            picking_id = order_confirmed.get('picking_id')  # Recupera l'ID del picking creato
             order_delivered = order_delivery(picking_id, vehicle_id)
 
             return {
@@ -73,5 +71,5 @@ class OrderConfirmAPI(http.Controller):
                 "delivery": order_delivered
             }
         except Exception as e:
-            _logger.error(f"Error in confirm_order API: {str(e)}")
+            _logger.error(f"Error in confirm_order route: {str(e)}")
             return {"status": "error", "message": f"Error during order confirmation: {str(e)}"}

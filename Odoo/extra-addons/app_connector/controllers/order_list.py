@@ -16,21 +16,21 @@ class OrderListAPI(http.Controller):
             
             domain = [('order_agent_id', '=', request.env.user.name)]
             
+            #filters
             if date:
                 domain.append(('date_order', '>=', date))
+            else:
+                domain.append(('date_order', '>=', fields.Date.today()))
             if zone:
                 domain.append(('zone_id', '=', zone))
-                
-            if not date:
-                domain.append(('date_order', '>=', fields.Date.today()))
-                
-            domain.append(('state', 'not in', ['cancel']))  # Escludi gli ordini con stato "cancel"
+
+            domain.append(('state', 'not in', ['cancel']))
 
             orders = request.env['sale.order'].search(domain, order='date_order asc')
 
             result = []
             
-            # Recupero dei prodotti associati all'ordine
+            # get order details for each order
             for o in orders:
                 linee_prodotti = []
                 for line in o.order_line:
@@ -57,5 +57,5 @@ class OrderListAPI(http.Controller):
             }
             
         except Exception as e:
-            _logger.error(f"Errore durante la generazione della lista degli ordini: {str(e)}")
-            return {'error': 'Si è verificato un errore durante la generazione della lista degli ordini.'}
+            _logger.error(f"Error in get_all_orders route: {e}")
+            return {"status": "error", "message": f"Error during order retrieval: {str(e)}"}
