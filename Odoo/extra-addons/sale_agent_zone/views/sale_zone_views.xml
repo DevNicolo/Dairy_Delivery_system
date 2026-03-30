@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <!-- Form view per creazione rapida al volo -->
+    <!-- Form view-->
     <record id="view_sale_zone_form" model="ir.ui.view">
         <field name="name">sale.zone.form</field>
         <field name="model">sale.zone</field>

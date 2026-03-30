@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <!-- Aggiunge zona commerciale nel form contatto, dopo il campo country -->
+    <!-- Add zone field to partner form -->
     <record id="view_partner_form_zone" model="ir.ui.view">
         <field name="name">res.partner.form.zone</field>
         <field name="model">res.partner</field>

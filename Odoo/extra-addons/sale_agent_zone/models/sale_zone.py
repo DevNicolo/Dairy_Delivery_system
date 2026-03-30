@@ -12,5 +12,5 @@ class SaleZone(models.Model):
     active = fields.Boolean(default=True)
 
     _sql_constraints = [
-        ("name_uniq", "UNIQUE(name)", "Il nome della zona deve essere univoco."),
+        ("name_uniq", "UNIQUE(name)", "The name of the zone must be unique."),
     ]

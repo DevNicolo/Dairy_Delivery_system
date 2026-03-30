@@ -5,23 +5,20 @@ class SaleOrder(models.Model):
     _inherit = "sale.order"
 
     zone_id = fields.Many2one(
-        comodel_name="sale.zone",   # questo indica l'altro membro della relazione
-        string="Zona commerciale",  # etichetta da visualizzare
-        compute="_compute_zone_agent",  # metodo che calcola il valore del campo
-        store=True, # indica che il valore calcolato deve essere memorizzato nel database
-        readonly=False, # indica che il campo è modificabile dall'utente  
+        comodel_name="sale.zone",   # this indicates the other member of the relationship
+        string="Zona commerciale",  # label to display in the form view
     )
-    # Many2many relayed from partner, editable on the order
+    
     order_agent_id = fields.Many2one(
-        comodel_name="res.partner", # questo indica l'altro membro della relazione
-        domain=[("agent", "=", True)], # filtro per mostrare solo i partner che sono agenti
-        string="Agente", # etichetta da visualizzare
+        comodel_name="res.partner",
+        domain=[("agent", "=", True)], # filter to show only partners that are agents
+        string="Agente", 
     )
     
     vehicle_id = fields.Many2one(
         comodel_name="stock.location", 
         string="Mezzo / Ubicazione", 
-        domain=[('usage', '=', 'transit')], # solo mezzi mobili
+        domain=[('usage', '=', 'transit')], # only show locations that are marked as 'transit' (used for vehicles in this context)
     )
     
     @api.onchange('partner_id')

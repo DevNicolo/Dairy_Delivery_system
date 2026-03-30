@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <!-- Form ordine/preventivo: aggiunge agenti e zona sotto il campo partner -->
-    <record id="view_sale_order_form_agent_zone" model="ir.ui.view"> <!-- definizione di una vista (serve per chiamarla poi -->
-        <field name="name">sale.order.form.agent.zone</field>   <!-- nome della vista -->
-        <field name="model">sale.order</field>              <!-- modello a cui si applica la vista -->
-        <field name="inherit_id" ref="sale.view_order_form"/> <!-- extends della vista del form di sale -->
+    <!-- Order/Quotation Form: adds agents and zone below the partner field -->
+    <record id="view_sale_order_form_agent_zone" model="ir.ui.view"> <!-- definition of a view (used to call it later -->
+        <field name="name">sale.order.form.agent.zone</field>   <!-- name of the view -->
+        <field name="model">sale.order</field>              <!-- model to which the view applies -->
+        <field name="inherit_id" ref="sale.view_order_form"/> <!-- extends the sale form view -->
         <field name="arch" type="xml">
             <xpath expr="//field[@name='partner_id']" position="after">
                 <field name="order_agent_id"
@@ -22,7 +22,7 @@
         </field>
     </record>
 
-    <!-- Vista lista preventivi: aggiunge colonne agenti e zona -->
+    <!-- Quotation list view: adds agent and zone columns -->
     <record id="view_preventivi_list" model="ir.ui.view">
         <field name="name">sale.order.list.preventivi</field>
         <field name="model">sale.order</field>
@@ -42,7 +42,7 @@
         </field>
     </record>
 
-    <!-- Vista lista ordini: aggiunge colonne agenti e zona -->
+    <!-- Order list view: adds agent and zone columns -->
     <record id="view_ordini_list" model="ir.ui.view">
         <field name="name">sale.order.list.ordini</field>
         <field name="model">sale.order</field>
