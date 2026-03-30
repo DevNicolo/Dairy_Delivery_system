@@ -1,5 +1,6 @@
 from odoo import models, http
 from odoo.http import request
+from odoo.exceptions import AccessDenied
 import jwt
 
 class IrHttp(models.AbstractModel):
@@ -19,26 +20,26 @@ class IrHttp(models.AbstractModel):
                     payload = jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
                     raw_uid = payload.get('uid')
 
-                    # --- LOGICA DI "PULIZIA" ---
-                    # Se raw_uid è un dizionario (come nel tuo caso), prendiamo la chiave 'uid'
+                    # --- Cleanup Logic ---
+                    # if uid is a dict, extract the 'uid' key; otherwise, use it directly
                     if isinstance(raw_uid, dict):
                         uid = raw_uid.get('uid')
                     else:
                         uid = raw_uid
                     
-                    # Verifichiamo che alla fine abbiamo un intero valido
+                    # verify that uid is a valid integer and not None
                     if uid:
                         request.update_env(user=int(uid))
                         return 
                     else:
-                        raise http.exceptions.AccessDenied("ID Utente non trovato nel token")
+                        raise AccessDenied("User ID not valid in token")
                     # ---------------------------
 
                 except (jwt.ExpiredSignatureError, jwt.InvalidTokenError):
-                    raise http.exceptions.AccessDenied("Token non valido o scaduto")
+                    raise AccessDenied("JWT token invalid or expired")
                 except (TypeError, ValueError):
-                    raise http.exceptions.AccessDenied("Formato ID Utente nel token non valido")
+                    raise AccessDenied("Error decoding JWT token")
             
-            raise http.exceptions.AccessDenied("Token mancante o non autorizzato")
+            raise AccessDenied("Missing or malformed JWT token")
         
         return super(IrHttp, cls)._authenticate(endpoint)
