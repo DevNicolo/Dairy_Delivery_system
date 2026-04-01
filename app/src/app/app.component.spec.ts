@@ -34,10 +34,10 @@ describe('AppComponent', () => {
     const menuItems = app.querySelectorAll('ion-item');
     expect(menuItems.length).toEqual(12);
     expect(menuItems[0].getAttribute('href')).toEqual(
-      '/folder/inbox'
+      '/home/inbox'
     );
     expect(menuItems[1].getAttribute('href')).toEqual(
-      '/folder/outbox'
+      '/home/outbox'
     );
   });
 });
