@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonContent, IonHeader, IonTitle, IonToolbar, IonInput, IonButton, IonLabel, IonList, IonItem } from '@ionic/angular/standalone';
+
+import { AuthService } from '../../services/auth';
 
 @Component({
   selector: 'app-login',
@@ -13,6 +15,10 @@ import { IonContent, IonHeader, IonTitle, IonToolbar, IonInput, IonButton, IonLa
 export class LoginPage implements OnInit {
   username: string = '';
   password: string = '';
+
+  authService = inject(AuthService);
+  public apiData: any;
+
   constructor() { }
 
   ngOnInit() {
@@ -22,9 +28,14 @@ export class LoginPage implements OnInit {
     console.log('Username:', this.username);
     console.log('Password:', this.password);
 
-    if(!this.username || !this.password) {
-      alert('Inserisci unsername e password.');
-    }
+    this.authService.login(this.username, this.password).subscribe({
+      next: (response) => {
+        console.log('Login successful:', response);
+      },
+      error: (error) => {
+        console.error('Login failed:', error);
+      }
+    });
   }
 
 }
