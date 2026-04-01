@@ -1,9 +1,10 @@
 // Questo file va fatto per ogni API / gruppo di API, ad esempio tutte le api che fanno operazioni sul magazzino, devono essere nello stesso file
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { CapacitorHttp, HttpResponse } from '@capacitor/core';
 import { from, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
+import { AuthService } from './auth';
 import { environment } from '../../environments/environment';
 
 const endpoint = '/get_all_products';
@@ -13,6 +14,9 @@ const endpoint = '/get_all_products';
 })
 export class ApiService {
 
+  private authService = inject(AuthService);
+  private userToken = this.authService.getToken();
+
   constructor() {}
 
   private response(options: any){
@@ -20,12 +24,13 @@ export class ApiService {
   }
 
   getProducts(): Observable<any> {
+
     const options = {
       url: `${environment.baseUrl}${endpoint}`,
 
       headers: { 
       'Content-Type': `${environment.type}`,
-      'Authorization': `${environment.odooToken}` 
+      'Authorization': `${environment.odooToken}${this.userToken}` 
       },
 
       data: {
