@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonInput, IonButton, IonLabel, IonList, IonItem } from '@ionic/angular/standalone';
+import { IonContent, IonHeader, IonTitle, IonToolbar, IonInput, IonButton, IonLabel, IonList, IonItem, MenuController } from '@ionic/angular/standalone';
 
 import { AuthService } from '../../services/auth';
 
@@ -13,6 +13,18 @@ import { AuthService } from '../../services/auth';
   imports: [IonContent, IonHeader, IonTitle, IonToolbar, IonInput, IonButton, IonLabel, IonList, IonItem, CommonModule, FormsModule]
 })
 export class LoginPage implements OnInit {
+
+  private sideMenu = inject(MenuController);
+
+  ionViewWillEnter() {
+    this.sideMenu.enable(false);
+  }
+
+  ionViewWillLeave() {
+    this.sideMenu.enable(true);
+  }
+
+
   username: string = '';
   password: string = '';
 
