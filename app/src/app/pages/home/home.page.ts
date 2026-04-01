@@ -2,7 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { IonHeader, IonToolbar, IonButtons, IonMenuButton, IonTitle, IonContent, IonButton, IonSpinner, IonList, IonItem, IonLabel, IonNote } from '@ionic/angular/standalone';
 
-import { ApiService } from '../services/api';
+import { ApiService } from '../../services/api';
 
 @Component({
   selector: 'app-home',
@@ -26,12 +26,12 @@ export class HomePage implements OnInit {
 
 
     loadinfo() {
-      this.apiService.getDati().subscribe({
-      next: (risposta) => {
-        this.apiData = risposta.result; // Salviamo i dati che arrivano          console.log('Dati ricevuti con successo:', risposta);
+      this.apiService.getProducts().subscribe({
+      next: (response) => {
+        this.apiData = response.result; // Salviamo i dati che arrivano          console.log('Dati ricevuti con successo:', response);
       },
-        error: (errore) => {
-          console.error('Qualcosa è andato storto:', errore);
+        error: (error) => {
+          console.error('Qualcosa è andato storto:', error);
         }
       });
 }
