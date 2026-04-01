@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonContent, IonHeader, IonTitle, IonToolbar, IonInput, IonButton, IonLabel, IonList, IonItem, MenuController } from '@ionic/angular/standalone';
 
+import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth';
 
 @Component({
@@ -15,12 +16,13 @@ import { AuthService } from '../../services/auth';
 export class LoginPage implements OnInit {
 
   private sideMenu = inject(MenuController);
+  private router = inject(Router);
 
-  ionViewWillEnter() {
+  ionViewWillEnter() {  // disable the side menu when entering the login page
     this.sideMenu.enable(false);
   }
 
-  ionViewWillLeave() {
+  ionViewWillLeave() {  // re-enable the side menu when leaving the login page
     this.sideMenu.enable(true);
   }
 
@@ -41,7 +43,11 @@ export class LoginPage implements OnInit {
 
     this.authService.login(this.username, this.password).subscribe({
       next: (response) => {
+        localStorage.setItem('my_token', response.token);  // store the token to prevent login attempts on protected routes
+
         console.log('Login successful:', response);
+
+        this.router.navigate(['/home']);
       },
       error: (error) => {
         console.error('Login failed:', error);

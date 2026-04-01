@@ -15,7 +15,7 @@ export class AuthService {
   constructor() {}
 
   private response(options: any){
-    return from(CapacitorHttp.post(options)).pipe(map(res => res.data.result));
+    return from(CapacitorHttp.post(options)).pipe(map(res => res.data));
   }
 
   login(username: string, password: string): Observable<any> {
