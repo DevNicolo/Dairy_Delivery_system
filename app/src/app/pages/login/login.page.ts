@@ -43,11 +43,12 @@ export class LoginPage implements OnInit {
 
     this.authService.login(this.username, this.password).subscribe({
       next: (response) => {
-        localStorage.setItem('my_token', response.token);  // store the token to prevent login attempts on protected routes
-
-        console.log('Login successful:', response);
-
-        this.router.navigate(['/home']);
+        if(response && response.token) {
+          this.authService.setToken(response.token);
+          this.router.navigate(['/home']);
+        } else {
+          console.error('Login failed: invalid credentials');
+        }
       },
       error: (error) => {
         console.error('Login failed:', error);

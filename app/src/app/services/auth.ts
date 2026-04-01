@@ -5,7 +5,8 @@ import { map } from 'rxjs/operators';
 
 import { environment } from '../../environments/environment';
 
-const endpoint = '/jwt/login';
+const endpointLogin = '/jwt/login';
+const endopointCheckSession = '/api/check_session';
 
 @Injectable({
   providedIn: 'root',
@@ -14,13 +15,34 @@ export class AuthService {
 
   constructor() {}
 
+  private userToken: string | null = null;
+
+  setToken(token: string) {
+    this.userToken = token;
+  }
+
+  getToken(): string | null {
+    return this.userToken;
+  }
+
+  isLoggedIn(): boolean {
+    if(this.userToken !== null) {
+      return true;
+    }
+    return false;
+  }
+
+  logout() {
+   return this.userToken = null;
+  }
+
   private response(options: any){
     return from(CapacitorHttp.post(options)).pipe(map(res => res.data));
   }
 
   login(username: string, password: string): Observable<any> {
     const options = {
-      url: `${environment.baseUrl}${endpoint}`,
+      url: `${environment.baseUrl}${endpointLogin}`,
 
       headers: {
         'Content-Type': `${environment.type}`,
@@ -34,4 +56,16 @@ export class AuthService {
 
     return this.response(options);
   }
+
+  checkSession(token: string): Observable<any> {
+    const options = {
+      url: `${environment.baseUrl}${endopointCheckSession}`,
+      headers: { 
+        'Authorization': `Bearer ${token}`, // Assicurati del formato richiesto da Odoo
+        'Content-Type': 'application/json'
+      },
+      data: { jsonrpc: "2.0", params: {} }
+    };
+    return from(CapacitorHttp.post(options));
+}
 }
