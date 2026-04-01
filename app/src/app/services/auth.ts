@@ -61,7 +61,7 @@ export class AuthService {
     const options = {
       url: `${environment.baseUrl}${endopointCheckSession}`,
       headers: { 
-        'Authorization': `Bearer ${token}`, // Assicurati del formato richiesto da Odoo
+        'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
       },
       data: { jsonrpc: "2.0", params: {} }

@@ -1,6 +1,5 @@
-// Questo file va fatto per ogni API / gruppo di API, ad esempio tutte le api che fanno operazioni sul magazzino, devono essere nello stesso file
 import { inject, Injectable } from '@angular/core';
-import { CapacitorHttp, HttpResponse } from '@capacitor/core';
+import { CapacitorHttp } from '@capacitor/core';
 import { from, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
