@@ -17,8 +17,7 @@ export class LoginPage implements OnInit {
   password: string = '';
 
   authService = inject(AuthService);
-  public apiData: any;
-
+  
   constructor() { }
 
   ngOnInit() {

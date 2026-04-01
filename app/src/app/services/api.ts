@@ -16,7 +16,7 @@ export class ApiService {
   constructor() {}
 
   private response(options: any){
-    return from(CapacitorHttp.post(options)).pipe(map(res => res.data.result));
+    return from(CapacitorHttp.post(options)).pipe(map(res => res.data));
   }
 
   getProducts(): Observable<any> {
