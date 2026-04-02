@@ -32,8 +32,8 @@ export class AuthService {
     return false;
   }
 
-  logout() {
-   return this.userToken = null;
+  clearToken() {
+    this.userToken = null;
   }
 
   private response(options: any){

@@ -20,6 +20,9 @@ export class LoginPage implements OnInit {
 
   ionViewWillEnter() {  // disable the side menu when entering the login page
     this.sideMenu.enable(false);
+    // Clear any existing username and password when the login page is entered
+    this.username = '';
+    this.password = '';
   }
 
   ionViewWillLeave() {  // re-enable the side menu when leaving the login page
@@ -57,5 +60,4 @@ export class LoginPage implements OnInit {
       }
     });
   }
-
 }
