@@ -16,7 +16,7 @@ import { Router } from '@angular/router';
 export class AppComponent {
 
   public appPages = [
-    { title: 'I miei ordini', url: '/home/order', icon: 'clipboard-outline' },
+    { title: 'I miei ordini', url: '/home/orders', icon: 'clipboard-outline' },
     { title: 'Il mio magazzino', url: '/home/warehouse', icon: 'cube-outline' },
     { title: 'Il mio profilo', url: '/home/profile', icon: 'person-outline' },
   ];
