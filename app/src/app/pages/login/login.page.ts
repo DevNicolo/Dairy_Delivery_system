@@ -48,10 +48,12 @@ export class LoginPage implements OnInit {
           this.router.navigate(['/home']);
         } else {
           console.error('Login failed: invalid credentials');
+          alert('Credenziali errate. Riprova.');
         }
       },
       error: (error) => {
         console.error('Login failed:', error);
+        alert('Si è verificato un errore durante il login. Riprova.');
       }
     });
   }
