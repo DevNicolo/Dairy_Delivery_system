@@ -24,15 +24,14 @@ export class HomePage implements OnInit {
     this.loadinfo();
   }
 
-
-    loadinfo() {
-      this.apiService.getProducts().subscribe({
+  loadinfo() {
+    this.apiService.getProducts().subscribe({
       next: (response) => {
         this.apiData = response.result; // Salviamo i dati che arrivano          console.log('Dati ricevuti con successo:', response);
       },
-        error: (error) => {
-          console.error('Qualcosa è andato storto:', error);
-        }
-      });
-}
+      error: (error) => {
+        console.error('Qualcosa è andato storto:', error);
+      }
+    });
+  } 
 }

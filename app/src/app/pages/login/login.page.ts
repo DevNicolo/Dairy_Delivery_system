@@ -5,6 +5,7 @@ import { IonContent, IonHeader, IonTitle, IonToolbar, IonInput, IonButton, IonLa
 
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth';
+import { UserService } from '../../services/user';
 
 @Component({
   selector: 'app-login',
@@ -34,6 +35,7 @@ export class LoginPage implements OnInit {
   password: string = '';
 
   authService = inject(AuthService);
+  userService = inject(UserService);
   
   constructor() { }
 
@@ -49,6 +51,11 @@ export class LoginPage implements OnInit {
         if(response && response.token) {
           this.authService.setToken(response.token);
           this.router.navigate(['/home']);
+          this.userService.getUserInfo().subscribe({  // Fetch user info after successful login
+            next: (response) => { 
+              this.userService.userDisplayName.set(response?.result?.user_info?.name); // Update the signal with the user's display name
+            },
+          });
         } else {
           console.error('Login failed: invalid credentials');
           alert('Credenziali errate. Riprova.');

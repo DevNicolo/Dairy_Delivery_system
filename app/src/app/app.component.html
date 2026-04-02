@@ -1,10 +1,11 @@
 <ion-app>
-  <ion-split-pane contentId="main-content">
+  <!-- look where we are, if we are for example, in the login page, we want to disable the menu, otherwise we want to enable it -->
+  <ion-split-pane contentId="main-content"> 
     <ion-menu contentId="main-content" type="overlay">
       <ion-content>
         <ion-list id="inbox-list">
-          <ion-list-header>HomePage</ion-list-header>
-          <ion-note>hi&#64;ionicframework.com</ion-note>
+          <ion-list-header>Benvenuto</ion-list-header>
+          <ion-note>{{ userService.userDisplayName() }}</ion-note>
 
           @for (p of appPages; track p; let i = $index) {
             <ion-menu-toggle auto-hide="false">

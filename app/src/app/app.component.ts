@@ -6,6 +6,7 @@ import { clipboardOutline, personOutline, cubeOutline, logOutOutline } from 'ion
 
 import { AuthService } from './services/auth';
 import { Router } from '@angular/router';
+import { UserService } from './services/user';
 
 @Component({
   selector: 'app-root',
@@ -14,6 +15,9 @@ import { Router } from '@angular/router';
   imports: [RouterLink, RouterLinkActive, IonApp, IonSplitPane, IonMenu, IonContent, IonList, IonListHeader, IonNote, IonMenuToggle, IonItem, IonIcon, IonLabel, IonRouterLink, IonRouterOutlet],
 })
 export class AppComponent {
+
+  private router = inject(Router);
+  public userService = inject(UserService);  // Inject UserService to access the user's display name
 
   public appPages = [
     { title: 'I miei ordini', url: '/home/orders', icon: 'clipboard-outline' },
@@ -28,10 +32,9 @@ export class AppComponent {
   }
 
   private authService = inject(AuthService);  
-  private Router = inject(Router);
   
   logout() {
     this.authService.clearToken();
-    this.Router.navigate(['/login']);
+    this.router.navigate(['/login']);
   }
 }
