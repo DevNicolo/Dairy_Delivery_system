@@ -10,4 +10,30 @@
       <ion-title size="large">I miei ordini</ion-title>
     </ion-toolbar>
   </ion-header>
+
+  <div class="ion-padding">
+    @if (orders && orders.length > 0) {
+      <ion-list>
+        @for (order of orders; track order.id) {
+          <ion-item>
+            <ion-label>
+              <h1>Ordine #{{ order.order_id }}</h1>
+              <h2>Cliente: {{ order.partner_id }}</h2>
+              <p>Data: {{ order.date_order }}</p>
+              <p>Zona: {{ order.zone_id }}</p>
+            </ion-label>
+            <ion-button fill="outline" slot="end" routerLink="/order-detail/{{ order.order_id }}">Dettagli</ion-button>
+          </ion-item>
+        }
+      </ion-list>
+    } @else if (orders && orders.length === 0) {
+      <p>Nessun ordine trovato.</p>
+    } @else {
+      <div class="ion-text-center">
+        <ion-spinner></ion-spinner>
+        <p>Caricamento ordini...</p>
+      </div>
+    }
+   </div>
+
 </ion-content>
