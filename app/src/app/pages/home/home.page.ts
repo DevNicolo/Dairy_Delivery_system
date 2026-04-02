@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { IonHeader, IonToolbar, IonButtons, IonMenuButton, IonTitle, IonContent, IonButton, IonSpinner, IonList, IonItem, IonLabel, IonNote } from '@ionic/angular/standalone';
+import { IonHeader, IonToolbar, IonButtons, IonMenuButton, IonTitle, IonContent, IonSpinner, IonList, IonItem, IonLabel, IonNote } from '@ionic/angular/standalone';
 
 import { ApiService } from '../../services/api';
 
@@ -8,7 +8,7 @@ import { ApiService } from '../../services/api';
   selector: 'app-home',
   templateUrl: './home.page.html',
   styleUrls: ['./home.page.scss'],
-  imports: [IonHeader, IonToolbar, IonButtons, IonMenuButton, IonTitle, IonContent, IonButton, IonSpinner, IonList, IonItem, IonLabel, IonNote],
+  imports: [IonHeader, IonToolbar, IonButtons, IonMenuButton, IonTitle, IonContent, IonSpinner, IonList, IonItem, IonLabel, IonNote],
 })
 export class HomePage implements OnInit {
   public home!: string;
