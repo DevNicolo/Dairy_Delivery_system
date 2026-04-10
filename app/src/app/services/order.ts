@@ -42,4 +42,27 @@ export class OrderService {
 
     return this.response(options);
   }
+
+  getProductById(id: number): Observable<any> {
+
+    const options = {
+      url: `${environment.baseUrl}${endpoint}`,
+
+      headers: { 
+      'Content-Type': `${environment.type}`,
+      'Authorization': `${environment.odooToken}${this.userToken}` 
+      },
+
+      data: {
+        jsonrpc: `${environment.jsonrpc}`,
+        method: `${environment.method}`,
+        params: {
+          order_id: id
+        },
+        id: `${environment.id}`
+      }
+    };
+
+    return this.response(options);
+  }
 }

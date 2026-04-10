@@ -7,12 +7,14 @@ _logger = logging.getLogger(__name__)
 
 
 class OrderListAPI(http.Controller):
-
+    
+    # API endpoint to retrieve all orders for the logged-in agent, with optional filters for date, zone, and order ID
     @http.route('/api/get_all_orders', type='json', auth='jwt', methods=['POST'], csrf=False)
     def get_all_orders(self, **kw):
         try:
             date = kw.get('date_order')
             zone = kw.get('zone_id')
+            order_id = kw.get('order_id')
             
             domain = [('order_agent_id', '=', request.env.user.name)]
             
@@ -25,8 +27,12 @@ class OrderListAPI(http.Controller):
                 domain.append(('zone_id', '=', zone))
 
             domain.append(('state', 'not in', ['cancel']))
-
-            orders = request.env['sale.order'].search(domain, order='date_order asc')
+            
+            # if order_id is provided, search for that specific order, otherwise retrieve all orders matching the filters
+            if not order_id:
+                orders = request.env['sale.order'].search(domain, order='date_order asc')
+            else:
+                orders = request.env['sale.order'].search([('id', '=', order_id)] + domain, order='date_order asc')
 
             result = []
             
@@ -47,8 +53,17 @@ class OrderListAPI(http.Controller):
                     'partner_id': o.partner_id.name,  
                     'date_order': o.date_order,
                     'zone_id': o.zone_id.name,
+                    'street': o.partner_shipping_id.street,
+                    'street2': o.partner_shipping_id.street2,
+                    'shipping_city': o.partner_shipping_id.city,
+                    'shipping_state': o.partner_shipping_id.state_id.name,
+                    'shipping_zip': o.partner_shipping_id.zip,
+                    'shipping_country': o.partner_shipping_id.country_id.name,
+                    'shipping_phone': o.partner_shipping_id.phone,
                     'vehicle_id': o.vehicle_id.name,
                     'prodotti': linee_prodotti,
+                    'total': o.amount_total,
+
                 })
                 
             return{

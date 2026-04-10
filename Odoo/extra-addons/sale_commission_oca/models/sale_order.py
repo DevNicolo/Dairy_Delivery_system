@@ -40,18 +40,6 @@ class SaleOrder(models.Model):
         )
         return [("id", "in", sol_agents.mapped("object_id.order_id").ids)]
 
-    @api.constrains("validity_date", "partner_agent_ids")
-    def _check_order_validity_and_agent(self):
-        for order in self:
-            if not order.validity_date:
-                raise ValidationError(
-                    _("Ogni contratto di vendita deve avere una scadenza (validity date).")
-                )
-            if not order.partner_agent_ids:
-                raise ValidationError(
-                    _("Ogni contratto di vendita deve avere un agente di riferimento.")
-                )
-
     def recompute_lines_agents(self):
         self.mapped("order_line").recompute_agents()
 

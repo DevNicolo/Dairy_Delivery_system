@@ -1,15 +1,91 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/orders"></ion-back-button>
+    </ion-buttons>
     <ion-title>Dettagli ordine #{{ order_id }}</ion-title>
-    <ion-back-button fill="outline" slot="end" routerLink="/orders">Indietro</ion-back-button>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">Dettagli ordine #{{ order_id }}</ion-title>
-      <ion-back-button fill="outline" slot="end" routerLink="/orders">Indietro</ion-back-button>
+      <ion-title size="large">Ordine {{ order?.name }}</ion-title>
     </ion-toolbar>
   </ion-header>
+
+  @if (order) {
+    <ion-card color="light">
+      <ion-card-header>
+        <ion-card-subtitle>Cliente</ion-card-subtitle>
+        <ion-card-title>{{ order.partner_id }}</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item lines="none" class="ion-no-padding">
+          <ion-icon name="calendar-outline" slot="start"></ion-icon>
+          <ion-label>
+            <p>Data e Ora</p>
+            <h3>{{ order.date_order }}</h3>
+          </ion-label>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+      <ion-card-header>
+        <ion-card-subtitle>Destinazione</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        <div style="display: flex; align-items: flex-start; gap: 10px;">
+          <ion-icon name="location" color="primary" style="font-size: 24px;"></ion-icon>
+          <div>
+            <h3 style="margin: 0; font-weight: bold;">{{ order.street }}</h3>
+            @if (order.street2) { <p style="margin: 2px 0;">{{ order.street2 }}</p> }
+            <p style="margin: 2px 0;">
+              {{ order.shipping_zip }} {{ order.shipping_city }} ({{ order.shipping_state }})
+            </p>
+            <p style="margin: 2px 0; color: gray; font-size: 0.9em;">{{ order.shipping_country }}</p>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <div class="ion-padding-horizontal">
+      <h3 style="margin-top: 20px;">Articoli</h3>
+    </div>
+
+    <ion-list lines="full">
+      @for (item of order.prodotti; track item.prodotto) {
+        <ion-item>
+          <ion-label>
+            <h2 style="font-weight: 600;">{{ item.prodotto }}</h2>
+            <p>Q.tà: {{ item.quantita }}</p>
+          </ion-label>
+          <div slot="end" class="ion-text-right">
+            <p style="font-size: 0.85em;">€ {{ item.prezzo_unitario.toFixed(2) }}</p>
+            <ion-text color="dark">
+              <b>€ {{ item.subtotale.toFixed(2) }}</b>
+            </ion-text>
+          </div>
+        </ion-item>
+      }
+    </ion-list>
+
+    <ion-card color="primary" class="ion-margin-top">
+      <ion-card-content>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <h2 style="margin: 0; color: white;">TOTALE ORDINE</h2>
+          <h1 style="margin: 0; color: white; font-weight: bold;">
+            € {{ order.total.toFixed(2) }}
+          </h1>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+  } @else {
+    <div class="ion-text-center ion-padding" style="margin-top: 100px;">
+      <ion-spinner name="dots" color="primary"></ion-spinner>
+      <p>Caricamento dettagli...</p>
+    </div>
+  }
 </ion-content>
