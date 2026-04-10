@@ -41,10 +41,10 @@ class OrderListAPI(http.Controller):
                 linee_prodotti = []
                 for line in o.order_line:
                     linee_prodotti.append({
-                        'prodotto': line.product_template_id.name,
-                        'quantita': line.product_uom_qty,
-                        'prezzo_unitario': line.price_unit,
-                        'subtotale': line.price_subtotal,
+                        'product': line.product_template_id.name,
+                        'quantity': line.product_uom_qty,
+                        'unit_price': line.price_unit,
+                        'subtotal': line.price_subtotal,
                     })
 
                 result.append({
@@ -61,7 +61,7 @@ class OrderListAPI(http.Controller):
                     'shipping_country': o.partner_shipping_id.country_id.name,
                     'shipping_phone': o.partner_shipping_id.phone,
                     'vehicle_id': o.vehicle_id.name,
-                    'prodotti': linee_prodotti,
+                    'products': linee_prodotti,
                     'total': o.amount_total,
 
                 })

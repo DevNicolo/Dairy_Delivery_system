@@ -37,7 +37,7 @@
       </ion-card-header>
       <ion-card-content>
         <div style="display: flex; align-items: flex-start; gap: 10px;">
-          <ion-icon name="location" color="primary" style="font-size: 24px;"></ion-icon>
+          <ion-icon name="location-outline" color="primary" style="font-size: 24px;"></ion-icon>
           <div>
             <h3 style="margin: 0; font-weight: bold;">{{ order.street }}</h3>
             @if (order.street2) { <p style="margin: 2px 0;">{{ order.street2 }}</p> }
@@ -55,16 +55,16 @@
     </div>
 
     <ion-list lines="full">
-      @for (item of order.prodotti; track item.prodotto) {
+      @for (item of order.products; track item.product) {
         <ion-item>
           <ion-label>
-            <h2 style="font-weight: 600;">{{ item.prodotto }}</h2>
-            <p>Q.tà: {{ item.quantita }}</p>
+            <h2 style="font-weight: 600;">{{ item.product }}</h2>
+            <p>Q.tà: {{ item.quantity }}</p>
           </ion-label>
           <div slot="end" class="ion-text-right">
-            <p style="font-size: 0.85em;">€ {{ item.prezzo_unitario.toFixed(2) }}</p>
+            <p style="font-size: 0.85em;">€ {{ item.unit_price.toFixed(2) }}</p>
             <ion-text color="dark">
-              <b>€ {{ item.subtotale.toFixed(2) }}</b>
+              <b>€ {{ item.subtotal.toFixed(2) }}</b>
             </ion-text>
           </div>
         </ion-item>

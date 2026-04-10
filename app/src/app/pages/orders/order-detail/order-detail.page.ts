@@ -5,6 +5,8 @@ import { IonBackButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonC
          IonHeader, IonIcon, IonItem, IonLabel, IonList, IonSpinner, IonText, IonTitle, IonToolbar } from '@ionic/angular/standalone';
 import { ActivatedRoute } from '@angular/router';
 import { OrderService } from '../../../services/order';
+import { addIcons } from 'ionicons';
+import { calendarOutline, locationOutline } from 'ionicons/icons';
 
 @Component({
   selector: 'app-order-detail',
@@ -22,7 +24,9 @@ export class OrderDetailPage implements OnInit {
   public order_id: string | null = null;
   public order: any;
 
-  constructor() { }
+  constructor() { 
+    addIcons({ calendarOutline, locationOutline })
+  }
 
   ngOnInit() {
     this.order_id = this.route.snapshot.paramMap.get('order_id'); // retrieving the order_id parameter from the route to display the details of the selected order
