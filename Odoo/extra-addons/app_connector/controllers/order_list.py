@@ -26,7 +26,7 @@ class OrderListAPI(http.Controller):
             if zone:
                 domain.append(('zone_id', '=', zone))
 
-            domain.append(('state', 'not in', ['cancel']))
+            domain.append(('state', 'in', ['sale']))
             
             # if order_id is provided, search for that specific order, otherwise retrieve all orders matching the filters
             if not order_id:
