@@ -7,7 +7,7 @@ import { AuthService } from './auth';
 import { environment } from '../../environments/environment';
 import { OrderService } from './order';
 
-const endpoint = '/get_available_products';
+const endpoint = '/get_all_products';
 
 @Injectable({
   providedIn: 'root'
@@ -25,7 +25,7 @@ export class ApiService {
     return from(CapacitorHttp.post(options)).pipe(map(res => res.data));
   }
 
-  getProducts(): Observable<any> {
+  getProducts(avaiability: string): Observable<any> {
     // need to get vehicle_id from orderService before making the API call
     return this.orderService.getDailyVehicle().pipe(
       switchMap(res => {
@@ -38,7 +38,10 @@ export class ApiService {
           data: {
             jsonrpc: `${environment.jsonrpc}`,
             method: `${environment.method}`,
-            params: { vehicle_id: res.result.vehicle_id }, 
+            params: { 
+              vehicle_id: res.result.vehicle_id,
+              avaiability: avaiability
+            }, 
             id: `${environment.id}`
           }
         };

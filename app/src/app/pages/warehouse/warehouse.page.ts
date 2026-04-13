@@ -21,11 +21,11 @@ export class WarehousePage implements OnInit {
   ngOnInit() {
     this.home = this.activatedRoute.snapshot.paramMap.get('id') as string;
 
-    this.loadinfo();
+    this.getCompleteWarehouse();
   }
 
-  loadinfo() {
-    this.apiService.getProducts().subscribe({
+  getCompleteWarehouse() {
+    this.apiService.getProducts('').subscribe({
       next: (response) => {
         this.apiData = response.result;
       },
