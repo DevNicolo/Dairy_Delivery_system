@@ -1,12 +1,13 @@
 import { inject, Injectable } from '@angular/core';
 import { CapacitorHttp } from '@capacitor/core';
 import { from, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 
 import { AuthService } from './auth';
 import { environment } from '../../environments/environment';
+import { OrderService } from './order';
 
-const endpoint = '/get_all_products';
+const endpoint = '/get_available_products';
 
 @Injectable({
   providedIn: 'root'
@@ -14,32 +15,36 @@ const endpoint = '/get_all_products';
 export class ApiService {
 
   private authService = inject(AuthService);
+  private orderService = inject(OrderService);
+  public vehicle_id: string | undefined;
   private userToken = this.authService.getToken();
 
-  constructor() {}
+  constructor() {}  
 
   private response(options: any){
     return from(CapacitorHttp.post(options)).pipe(map(res => res.data));
   }
 
   getProducts(): Observable<any> {
-
-    const options = {
-      url: `${environment.baseUrl}${endpoint}`,
-
-      headers: { 
-      'Content-Type': `${environment.type}`,
-      'Authorization': `${environment.odooToken}${this.userToken}` 
-      },
-
-      data: {
-        jsonrpc: `${environment.jsonrpc}`,
-        method: `${environment.method}`,
-        params: {},
-        id: `${environment.id}`
-      }
-    };
-
-    return this.response(options);
+    // need to get vehicle_id from orderService before making the API call
+    return this.orderService.getDailyVehicle().pipe(
+      switchMap(res => {
+        const options = {
+          url: `${environment.baseUrl}${endpoint}`,
+          headers: { 
+            'Content-Type': `${environment.type}`,
+            'Authorization': `${environment.odooToken}${this.userToken}` 
+          },
+          data: {
+            jsonrpc: `${environment.jsonrpc}`,
+            method: `${environment.method}`,
+            params: { vehicle_id: res.result.vehicle_id }, 
+            id: `${environment.id}`
+          }
+        };
+        
+        return this.response(options);
+      })
+    );
   }
 }

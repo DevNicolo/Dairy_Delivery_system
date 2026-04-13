@@ -6,7 +6,8 @@ import { map } from 'rxjs/operators';
 import { AuthService } from './auth';
 import { environment } from '../../environments/environment';
 
-const endpoint = '/get_all_orders';
+const endpoint_products = '/get_all_orders';
+const endpoint_vehicle = '/get_daily_vehicle';
 
 @Injectable({
   providedIn: 'root'
@@ -25,7 +26,7 @@ export class OrderService {
   getProducts(): Observable<any> {
 
     const options = {
-      url: `${environment.baseUrl}${endpoint}`,
+      url: `${environment.baseUrl}${endpoint_products}`,
 
       headers: { 
       'Content-Type': `${environment.type}`,
@@ -46,7 +47,7 @@ export class OrderService {
   getProductById(id: number): Observable<any> {
 
     const options = {
-      url: `${environment.baseUrl}${endpoint}`,
+      url: `${environment.baseUrl}${endpoint_products}`,
 
       headers: { 
       'Content-Type': `${environment.type}`,
@@ -59,6 +60,27 @@ export class OrderService {
         params: {
           order_id: id
         },
+        id: `${environment.id}`
+      }
+    };
+
+    return this.response(options);
+  }
+
+  getDailyVehicle(): Observable<any> {
+
+    const options = {
+      url: `${environment.baseUrl}${endpoint_vehicle}`,
+
+      headers: { 
+      'Content-Type': `${environment.type}`,
+      'Authorization': `${environment.odooToken}${this.userToken}` 
+      },
+
+      data: {
+        jsonrpc: `${environment.jsonrpc}`,
+        method: `${environment.method}`,
+        params: {},
         id: `${environment.id}`
       }
     };

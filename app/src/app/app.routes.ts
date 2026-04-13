@@ -9,8 +9,7 @@ export const routes: Routes = [
   },
   {
     path: 'home',
-    loadComponent: () =>
-      import('./pages/home/home.page').then((m) => m.HomePage),
+    loadComponent: () => import('./pages/home/home.page').then((m) => m.HomePage),
     canActivate: [authGuard],
   },
   {
@@ -23,7 +22,13 @@ export const routes: Routes = [
     canActivate: [authGuard],
   },
   {
+    path: 'home/warehouse',
+    loadComponent: () => import('./pages/warehouse/warehouse.page').then( m => m.WarehousePage),
+    canActivate: [authGuard],
+  },
+  {
     path: 'order-detail/:order_id', // page is dynamic and receives the order_id as a parameter to display the details of the selected order
     loadComponent: () => import('./pages/orders/order-detail/order-detail.page').then( m => m.OrderDetailPage)
   },
+
 ];

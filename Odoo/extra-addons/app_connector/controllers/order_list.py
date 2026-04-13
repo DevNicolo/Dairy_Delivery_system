@@ -74,3 +74,35 @@ class OrderListAPI(http.Controller):
         except Exception as e:
             _logger.error(f"Error in get_all_orders route: {e}")
             return {"status": "error", "message": f"Error during order retrieval: {str(e)}"}
+        
+
+    @http.route('/api/get_daily_vehicle', type='json', auth='jwt', methods=['POST'], csrf=False)
+    def get_daily_vehicle(self, **kw):
+        try:
+            date_today = fields.Date.today()
+            
+            domain = [
+                ('order_agent_id', '=', request.env.user.name),
+                ('state', '=', 'sale'),
+                ('date_order', '>=', date_today)
+            ]
+            
+            # Search for the first order matching the criteria (agent, state, date)
+            order = request.env['sale.order'].search(domain, limit=1)
+
+            if not order:
+                return {
+                    'status': 'success',
+                    'vehicle_id': False,
+                    'message': 'Order not found for today'
+                }
+
+            # return the name of the vehicle associated
+            return {
+                'status': 'success',
+                'vehicle_id': order.vehicle_id.name
+            }
+            
+        except Exception as e:
+            _logger.error(f"Error in get_daily_vehicle: {e}")
+            return {"status": "error", "message": str(e)}

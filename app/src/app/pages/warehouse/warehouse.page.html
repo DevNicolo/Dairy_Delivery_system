@@ -1,0 +1,72 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Il mio magazzino</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Il mio magazzino</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <div class="ion-padding">
+    @if (apiData && apiData.length > 0) {
+      <ion-list lines="full">
+        @for (product of apiData; track product.id) {
+          <ion-item>
+            <ion-label>
+              <h2 style="font-weight: bold; color: var(--ion-color-dark); margin-bottom: 8px;">
+                {{ product.name }}
+              </h2>
+              
+              <p style="margin-bottom: 6px;">
+                <ion-badge color="light" mode="ios">
+                  Cod: {{ product.default_code || 'N/D' }}
+                </ion-badge>
+                <ion-badge color="secondary" mode="ios" class="ion-margin-start">
+                  Categoria: {{ product.category }}
+                </ion-badge>
+              </p>
+
+              <div style="display: flex; gap: 15px; margin-top: 10px;">
+                <p style="margin: 0;">
+                  Quantità Totale: 
+                  <b>
+                    <ion-text [color]="product.qty_available > 0 ? 'success' : 'danger'">
+                      {{ product.qty_available }}
+                    </ion-text>
+                  </b>
+                </p>
+                <p style="margin: 0;">
+                  Quantità Effettiva: <b>{{ product.virtual_available }}</b>
+                </p>
+              </div>
+            </ion-label>
+
+            <ion-note slot="end" class="ion-text-right">
+              <div style="font-size: 1.2em; font-weight: bold; color: var(--ion-color-primary);">
+                {{ product.list_price.toFixed(2) }} €
+              </div>
+              <p style="font-size: 0.75em; margin: 0;">Prezzo listino</p>
+            </ion-note>
+          </ion-item>
+        }
+      </ion-list>
+    } @else if (apiData && apiData.length === 0) {
+      <div class="ion-text-center ion-padding" style="margin-top: 40px;">
+        <ion-icon name="archive-outline" style="font-size: 64px; color: #ccc;"></ion-icon>
+        <p>Nessun prodotto disponibile nel catalogo.</p>
+      </div>
+    } @else {
+      <div class="ion-text-center ion-padding" style="margin-top: 40px;">
+        <ion-spinner name="crescent" color="primary"></ion-spinner>
+        <p>Caricamento prodotti in corso...</p>
+      </div>
+    }
+  </div>
+</ion-content>
