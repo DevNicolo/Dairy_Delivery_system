@@ -13,7 +13,7 @@ class OrderListAPI(http.Controller):
     def get_all_orders(self, **kw):
         try:
             date = kw.get('date_order')
-            zone = kw.get('zone_id')
+            zone = kw.get('shipping_city')
             order_id = kw.get('order_id')
             
             domain = [('order_agent_id', '=', request.env.user.name)]
@@ -24,7 +24,7 @@ class OrderListAPI(http.Controller):
             else:
                 domain.append(('date_order', '>=', fields.Date.today()))
             if zone:
-                domain.append(('zone_id', '=', zone))
+                domain.append(('shipping_city', '=', zone))
 
             domain.append(('state', 'in', ['sale']))
             
@@ -52,7 +52,6 @@ class OrderListAPI(http.Controller):
                     'name': o.name,
                     'partner_id': o.partner_id.name,  
                     'date_order': o.date_order,
-                    'zone_id': o.zone_id.name,
                     'street': o.partner_shipping_id.street,
                     'street2': o.partner_shipping_id.street2,
                     'shipping_city': o.partner_shipping_id.city,

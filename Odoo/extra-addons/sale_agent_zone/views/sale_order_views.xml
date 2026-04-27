@@ -11,10 +11,6 @@
                 <field name="order_agent_id"
                        string="Agente"
                        options="{'no_quick_create': True}"/>
-                <field name="zone_id"
-                       string="Zona commerciale"
-                       options="{'no_open': False, 'no_quick_create': False}"
-                       />
                 <field name="vehicle_id"
                        string="Mezzo"
                        options="{'no_open': False, 'no_quick_create': False}"/>
@@ -32,9 +28,6 @@
                 <field name="order_agent_id"
                        string="Agente"
                        optional="show"/>
-                <field name="zone_id"
-                       string="Zona"
-                       optional="show"/>
                 <field name="vehicle_id"
                        string="Mezzo"
                        optional="show"/>
@@ -51,9 +44,6 @@
             <xpath expr="//field[@name='partner_id']" position="after">
                 <field name="order_agent_id"
                        string="Agente"
-                       optional="show"/>
-                <field name="zone_id"
-                       string="Zona"
                        optional="show"/>
                 <field name="vehicle_id"
                        string="Mezzo"
