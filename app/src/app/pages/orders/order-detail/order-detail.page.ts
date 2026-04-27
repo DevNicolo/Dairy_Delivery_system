@@ -1,12 +1,12 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonBackButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonContent, 
+import { IonBackButton, IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonContent, 
          IonHeader, IonIcon, IonItem, IonLabel, IonList, IonSpinner, IonText, IonTitle, IonToolbar } from '@ionic/angular/standalone';
 import { ActivatedRoute } from '@angular/router';
 import { OrderService } from '../../../services/order';
 import { addIcons } from 'ionicons';
-import { calendarOutline, locationOutline } from 'ionicons/icons';
+import { calendarOutline, locationOutline, downloadOutline } from 'ionicons/icons';
 
 @Component({
   selector: 'app-order-detail',
@@ -15,7 +15,7 @@ import { calendarOutline, locationOutline } from 'ionicons/icons';
   standalone: true,
   imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonBackButton, 
             IonSpinner, IonLabel, IonList, IonItem, IonText, IonIcon, IonCardContent, IonCardTitle, 
-            IonCardSubtitle, IonCard, IonCardHeader, IonButtons]
+            IonCardSubtitle, IonCard, IonCardHeader, IonButtons, IonButton]
 })
 export class OrderDetailPage implements OnInit {
 
@@ -25,7 +25,7 @@ export class OrderDetailPage implements OnInit {
   public order: any;
 
   constructor() { 
-    addIcons({ calendarOutline, locationOutline })
+    addIcons({ calendarOutline, locationOutline, downloadOutline })
   }
 
   ngOnInit() {

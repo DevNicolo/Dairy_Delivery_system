@@ -73,12 +73,17 @@
 
     <ion-card color="primary" class="ion-margin-top">
       <ion-card-content>
-        <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
           <h2 style="margin: 0; color: white;">TOTALE ORDINE</h2>
           <h1 style="margin: 0; color: white; font-weight: bold;">
             € {{ order.total.toFixed(2) }}
           </h1>
         </div>
+
+        <ion-button expand="block" fill="outline" color="light">
+          <ion-icon name="download-outline" slot="start"></ion-icon>
+          Fattura
+        </ion-button>
       </ion-card-content>
     </ion-card>
 
