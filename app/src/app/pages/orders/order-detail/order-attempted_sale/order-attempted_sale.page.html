@@ -1,0 +1,54 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Aggiungi prodotti</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="cancel()">Annulla</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="ion-padding-bottom">
+    <p>Vuoi aggiungere altro all'ordine <b>{{ orderName }}</b>?</p>
+  </div>
+
+  @if (apiData && apiData.length > 0) {
+    <ion-list lines="full">
+      @for (product of apiData; track product.id) {
+        <ion-item>
+          <ion-label>
+            <h2 style="font-weight: bold;">{{ product.name }}</h2>
+            <p>Prezzo: € {{ product.list_price }}</p>
+            <p>Disponibilità: {{ product.virtual_available }}</p>
+          </ion-label>
+
+          <div slot="end" style="display: flex; align-items: center; background: #f4f4f4; border-radius: 8px;">
+            <ion-button fill="clear" (click)="changeQty(product.id, -1)">
+              <ion-icon name="remove-outline" slot="icon-only"></ion-icon>
+            </ion-button>
+
+            <ion-input 
+              type="number" 
+              [(ngModel)]="quantities[product.id]" 
+              style="width: 45px; text-align: center; font-weight: bold;">
+            </ion-input>
+
+            <ion-button fill="clear" (click)="changeQty(product.id, 1)">
+              <ion-icon name="add-outline" slot="icon-only"></ion-icon>
+            </ion-button>
+          </div>
+        </ion-item>
+      }
+    </ion-list>
+
+    <ion-button expand="block" (click)="confirm()" class="ion-margin-top">
+      Conferma Ordine
+    </ion-button>
+
+  } @else {
+    <div class="ion-text-center ion-padding" style="margin-top: 40px;">
+      <ion-spinner name="crescent" color="primary"></ion-spinner>
+      <p>Recupero prodotti disponibili...</p>
+    </div>
+  }
+</ion-content>

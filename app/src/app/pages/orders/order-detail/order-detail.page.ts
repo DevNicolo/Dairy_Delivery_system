@@ -7,6 +7,8 @@ import { ActivatedRoute } from '@angular/router';
 import { OrderService } from '../../../services/order';
 import { addIcons } from 'ionicons';
 import { calendarOutline, locationOutline, downloadOutline } from 'ionicons/icons';
+import { ModalController } from '@ionic/angular/standalone';
+import { OrderAttemptedSaleComponent } from './order-attempted_sale/order-attempted_sale.page';
 
 @Component({
   selector: 'app-order-detail',
@@ -46,6 +48,29 @@ export class OrderDetailPage implements OnInit {
         console.error('error:', error);
       }
       });
+    }
+  }
+
+  private modalController = inject(ModalController);
+
+  async openConfirmModal() {
+    const modal = await this.modalController.create({
+      component: OrderAttemptedSaleComponent, // the component to display inside the modal
+      componentProps: {
+        orderName: this.order?.name // passing the order name as a prop to the modal component, so it can display it or use it as needed
+      },
+      // Configuring the modal to be presented as a sheet that can be dragged to different breakpoints
+      breakpoints: [0, 0.5, 0.8],
+      initialBreakpoint: 0.5
+    });
+
+    await modal.present();
+
+    // Waiting for the modal to be dismissed and checking the role of dismissal to determine if the user confirmed the action
+    const { data, role } = await modal.onWillDismiss();
+    if (role === 'confirm') {
+      console.log('L\'utente ha confermato!');
+      // Here you can add the logic to handle the confirmation, such as updating the order status or making an API call
     }
   }
 }
