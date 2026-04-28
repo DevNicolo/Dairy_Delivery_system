@@ -9,6 +9,7 @@ import { addIcons } from 'ionicons';
 import { calendarOutline, locationOutline, downloadOutline } from 'ionicons/icons';
 import { ModalController } from '@ionic/angular/standalone';
 import { OrderAttemptedSaleComponent } from './order-attempted_sale/order-attempted_sale.page';
+import { OrderInvoiceCreateComponent } from './order-invoice-create/order-invoice-create.component';
 
 @Component({
   selector: 'app-order-detail',
@@ -53,24 +54,70 @@ export class OrderDetailPage implements OnInit {
 
   private modalController = inject(ModalController);
 
+  // modal flow
+
   async openConfirmModal() {
-    const modal = await this.modalController.create({
-      component: OrderAttemptedSaleComponent, // the component to display inside the modal
-      componentProps: {
-        orderName: this.order?.name // passing the order name as a prop to the modal component, so it can display it or use it as needed
-      },
-      // Configuring the modal to be presented as a sheet that can be dragged to different breakpoints
+    // open the first popup (attempted sale)
+    const attempted_sale_modal = await this.modalController.create({
+      component: OrderAttemptedSaleComponent,
+      componentProps: { orderName: this.order?.name },
       breakpoints: [0, 0.5, 0.8],
       initialBreakpoint: 0.5
     });
 
-    await modal.present();
+    await attempted_sale_modal.present();
 
-    // Waiting for the modal to be dismissed and checking the role of dismissal to determine if the user confirmed the action
-    const { data, role } = await modal.onWillDismiss();
+    const { data, role } = await attempted_sale_modal.onWillDismiss();
+
+    if (role === 'confirm' && data?.selection) {
+    
+    // add products
+    this.orderService.addProductsToOrder(parseInt(this.order_id!), data.selection).subscribe({
+      next: (resAdd) => {
+        console.log('Prodotti aggiunti:', resAdd);
+
+        // retrieve vehicle
+        this.orderService.getDailyVehicle().subscribe({
+          next: (resVehicle) => {
+            const vehicle_id = resVehicle.result.vehicle_numeric_id;
+            console.log('Veicolo recuperato:', vehicle_id);
+
+            // confirm order
+            this.orderService.confirmOrder(parseInt(this.order_id!), vehicle_id).subscribe({
+              next: (resConfirm) => {
+                console.log('Ordine confermato definitivamente:', resConfirm);
+                
+                // open invoice modal
+                this.openInvoiceModal(vehicle_id, data.selection);
+              },
+              error: (err) => console.error('Errore conferma ordine:', err)
+            });
+          },
+          error: (err) => console.error('Errore veicolo:', err)
+        });
+      },
+      error: (err) => console.error('Errore aggiunta prodotti:', err)
+    });
+    }
+  }
+
+  async openInvoiceModal(vehicle_id: number, selection: any) {
+    const invoice_modal = await this.modalController.create({
+      component: OrderInvoiceCreateComponent,
+      componentProps: { 
+        orderName: this.order?.name,
+        selection: selection 
+      },
+      breakpoints: [0, 0.5],
+      initialBreakpoint: 0.5
+    });
+
+    await invoice_modal.present();
+
+    const { data, role } = await invoice_modal.onWillDismiss();
+
     if (role === 'confirm') {
-      console.log('L\'utente ha confermato!');
-      // Here you can add the logic to handle the confirmation, such as updating the order status or making an API call
+      //to be continued 
     }
   }
 }

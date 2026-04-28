@@ -11,7 +11,7 @@ def confirm_order(order_id):
         if not order.exists():
             return {"status": "error", "message": "Order not found"}
 
-        order.action_confirm()
+    #    order.action_confirm()
         
         # get the latest picking associated with the order that is not cancelled
         pickings = order.picking_ids.filtered(lambda p: p.state != 'cancel').sorted('id')

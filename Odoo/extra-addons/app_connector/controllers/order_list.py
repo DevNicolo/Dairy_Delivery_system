@@ -99,7 +99,8 @@ class OrderListAPI(http.Controller):
             # return the name of the vehicle associated
             return {
                 'status': 'success',
-                'vehicle_id': order.vehicle_id.name
+                'vehicle_id': order.vehicle_id.name,
+                'vehicle_numeric_id': order.vehicle_id.id
             }
             
         except Exception as e:
