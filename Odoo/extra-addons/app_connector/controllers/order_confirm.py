@@ -73,3 +73,34 @@ class OrderConfirmAPI(http.Controller):
         except Exception as e:
             _logger.error(f"Error in confirm_order route: {str(e)}")
             return {"status": "error", "message": f"Error during order confirmation: {str(e)}"}
+        
+
+    # add products to order from attempted sale
+
+    @http.route('/api/add_products', type='json', auth='jwt', methods=['POST'], csrf=False)
+    def add_products(self, **kw):
+        try:
+            order_id = int(kw.get('order_id'))
+            products = kw.get('products', []) # this should be a list of dicts with 'product_id' and 'quantity' keys
+            
+            sale_order = request.env['sale.order'].sudo().browse(order_id)
+
+            # prepare the list of lines to add in the format
+            lines_to_add = []
+            for item in products:
+                lines_to_add.append((0, 0, {
+                    'product_id': int(item.get('product_id')),
+                    'product_uom_qty': float(item.get('quantity')),
+                }))
+
+            # add the lines to the order
+            if lines_to_add:
+                sale_order.sudo().write({
+                    'order_line': lines_to_add
+                })
+            
+            return {"status": "success", "message": f"{len(lines_to_add)} products added to order {sale_order.name}"}
+            
+        except Exception as e:
+            _logger.error(f"Error in add_products route: {str(e)}")
+            return {"status": "error", "message": f"Error during add products: {str(e)}"}
