@@ -92,34 +92,24 @@ export class OrderDetailPage implements OnInit {
     const { data, role } = await attempted_sale_modal.onWillDismiss();
 
     if (role === 'confirm' && data?.selection) {
-    
-    // add products
-    this.orderService.addProductsToOrder(parseInt(this.order_id!), data.selection).subscribe({
-      next: (resAdd) => {
-        console.log('Prodotti aggiunti:', resAdd);
+      // add products
+      this.orderService.addProductsToOrder(parseInt(this.order_id!), data.selection).subscribe({
+        next: (resAdd) => {
+          console.log('Prodotti aggiunti:', resAdd);
 
-        // retrieve vehicle
-        this.orderService.getDailyVehicle().subscribe({
-          next: (resVehicle) => {
-            const vehicle_id = resVehicle.result.vehicle_numeric_id;
-            console.log('Veicolo recuperato:', vehicle_id);
+          // confirm order
+          this.orderService.confirmOrder(parseInt(this.order_id!)).subscribe({
+            next: (resConfirm) => {
+              console.log('Ordine confermato definitivamente:', resConfirm);
 
-            // confirm order
-            this.orderService.confirmOrder(parseInt(this.order_id!), vehicle_id).subscribe({
-              next: (resConfirm) => {
-                console.log('Ordine confermato definitivamente:', resConfirm);
-                
-                // open invoice modal
-                this.openInvoiceModal();
-              },
-              error: (err) => console.error('Errore conferma ordine:', err)
-            });
-          },
-          error: (err) => console.error('Errore veicolo:', err)
-        });
-      },
-      error: (err) => console.error('Errore aggiunta prodotti:', err)
-    });
+              // open invoice modal
+              this.openInvoiceModal();
+            },
+            error: (err) => console.error('Errore conferma ordine:', err)
+          });
+        },
+        error: (err) => console.error('Errore aggiunta prodotti:', err)
+      });
     }
   }
 

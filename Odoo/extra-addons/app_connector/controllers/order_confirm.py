@@ -10,8 +10,6 @@ def confirm_order(order_id):
         
         if not order.exists():
             return {"status": "error", "message": "Order not found"}
-
-    #    order.action_confirm()
         
         # get the latest picking associated with the order that is not cancelled
         pickings = order.picking_ids.filtered(lambda p: p.state != 'cancel').sorted('id')
@@ -27,7 +25,7 @@ def confirm_order(order_id):
         _logger.error(f"Error confirming order {order_id}: {str(e)}")
         return {"status": "error", "message": f"Error confirming order: {str(e)}"}
     
-def order_delivery(picking_id, vehicle_id):
+def order_delivery(picking_id):
     try:
         # get the picking record and ensure it's not cancelled
         picking = request.env['stock.picking'].search([
@@ -38,14 +36,11 @@ def order_delivery(picking_id, vehicle_id):
         if not picking.exists():
             return {"status": "error", "message": "Picking not found"}
 
-
-        # this is just a double check, custom_stock_extension should have already assigned the vehicle to the picking during creation
-        picking.location_id = vehicle_id  # assign the vehicle to the picking
         picking.button_validate()  # convalidate the picking
 
         return {
             "status": "success",
-            "message": f"Picking {picking.name} marked as delivered with vehicle {vehicle_id}",
+            "message": f"Picking {picking.name} marked as delivered",
         }
     except Exception as e:
         _logger.error(f"Error delivering picking {picking_id}: {str(e)}")
@@ -58,7 +53,6 @@ class OrderConfirmAPI(http.Controller):
     def post_confirm_order(self, **kw):
         try:
             order_id = kw.get('order_id')
-            vehicle_id = kw.get('vehicle_id')
             
             order_confirmed = confirm_order(order_id)
             
@@ -66,7 +60,7 @@ class OrderConfirmAPI(http.Controller):
                 return order_confirmed  
             picking_id = order_confirmed.get('picking_id')  # get the picking_id from the order confirmation result
             
-            order_delivered = order_delivery(picking_id, vehicle_id)
+            order_delivered = order_delivery(picking_id)
 
             return {
                 "confirmation": order_confirmed,

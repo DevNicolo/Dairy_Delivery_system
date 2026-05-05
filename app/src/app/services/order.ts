@@ -123,7 +123,7 @@ export class OrderService {
     return this.response(options);
   }
 
-  confirmOrder(order_id: number, vehicle_id: number): Observable<any> {
+  confirmOrder(order_id: number): Observable<any> {
 
     const options = {
       url: `${environment.baseUrl}${endpoint_confirm_order}`,
@@ -137,8 +137,7 @@ export class OrderService {
         jsonrpc: `${environment.jsonrpc}`,
         method: `${environment.method}`,
         params: {
-          order_id: order_id,
-          vehicle_id: vehicle_id
+          order_id: order_id
         },
         id: `${environment.id}`
       }
