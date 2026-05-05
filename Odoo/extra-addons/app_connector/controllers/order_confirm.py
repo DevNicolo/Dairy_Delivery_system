@@ -38,6 +38,8 @@ def order_delivery(picking_id, vehicle_id):
         if not picking.exists():
             return {"status": "error", "message": "Picking not found"}
 
+
+        # this is just a double check, custom_stock_extension should have already assigned the vehicle to the picking during creation
         picking.location_id = vehicle_id  # assign the vehicle to the picking
         picking.button_validate()  # convalidate the picking
 
