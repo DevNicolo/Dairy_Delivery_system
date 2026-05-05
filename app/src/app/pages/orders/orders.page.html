@@ -20,7 +20,7 @@
         @for (order of orders; track order.id) {
           <ion-item>
             <ion-label>
-              <h1>Ordine #{{ order.order_id }}</h1>
+              <h1>Ordine #{{ order.name }}</h1>
               <h2>Cliente: {{ order.partner_id }}</h2>
               <p>Data: {{ order.date_order }}</p>
               <p>Zona: {{ order.shipping_city }}</p>
