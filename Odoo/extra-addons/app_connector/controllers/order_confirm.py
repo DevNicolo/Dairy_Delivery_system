@@ -76,7 +76,25 @@ class OrderConfirmAPI(http.Controller):
             _logger.error(f"Error in confirm_order route: {str(e)}")
             return {"status": "error", "message": f"Error during order confirmation: {str(e)}"}
         
+    @http.route('/api/get_delivery_status', type='json', auth='jwt', methods=['POST'], csrf=False)
+    def get_delivery_status(self, **kw):
+        try:
+            order_id = kw.get('order_id')
+            order = request.env['sale.order'].browse(order_id)
+            picking = order.picking_ids.filtered(lambda p: p.state != 'cancel').sorted('id')[-1] if order.picking_ids else False
 
+            if not picking.exists():
+                return {"status": "error", "message": "Picking not found"}
+            
+            return {
+                "status": "success",
+                "picking_id": picking.id,
+                "picking_state": picking.state,
+            }
+        except Exception as e:
+            _logger.error(f"Error in get_delivery_status route: {str(e)}")
+            return {"status": "error", "message": f"Error retrieving delivery status: {str(e)}"}
+    
     # add products to order from attempted sale
 
     @http.route('/api/add_products', type='json', auth='jwt', methods=['POST'], csrf=False)

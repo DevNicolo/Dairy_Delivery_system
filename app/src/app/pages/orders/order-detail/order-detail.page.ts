@@ -6,7 +6,7 @@ import { IonBackButton, IonButton, IonButtons, IonCard, IonCardContent, IonCardH
 import { ActivatedRoute } from '@angular/router';
 import { OrderService } from '../../../services/order';
 import { addIcons } from 'ionicons';
-import { calendarOutline, locationOutline, downloadOutline } from 'ionicons/icons';
+import { calendarOutline, locationOutline, downloadOutline, receiptOutline } from 'ionicons/icons';
 import { ModalController } from '@ionic/angular/standalone';
 import { OrderAttemptedSaleComponent } from './order-attempted_sale/order-attempted_sale.page';
 import { OrderInvoiceCreateComponent } from './order-invoice-create/order-invoice-create.component';
@@ -28,7 +28,7 @@ export class OrderDetailPage implements OnInit {
   public order: any;
 
   constructor() { 
-    addIcons({ calendarOutline, locationOutline, downloadOutline })
+    addIcons({ calendarOutline, locationOutline, downloadOutline, receiptOutline })
   }
 
   ngOnInit() {
@@ -44,10 +44,32 @@ export class OrderDetailPage implements OnInit {
           console.log('success:', response);
           const [singleOrder] = response.result.orders; // using destructuring to extract the order from the array
           this.order = singleOrder; // saving the data that arrives
+          
+          //check delivery status after order is loaded
+          this.checkDeliveryStatus();
         },
       error: (error) => {
         console.error('error:', error);
       }
+      });
+    }
+  }
+
+  // button logic based on delivery status
+
+  deliveryStatus: string = 'unknown';
+
+  checkDeliveryStatus() {
+    if (this.order_id) {
+      this.orderService.getDeliveryStatus(parseInt(this.order_id)).subscribe({
+        next: (response) => {
+          console.log('Delivery status response:', response);
+          this.deliveryStatus = response.result.picking_state;
+        },
+        error: (error) => {
+          console.error('Error fetching delivery status:', error);
+          this.deliveryStatus = 'error';
+        }
       });
     }
   }
@@ -88,7 +110,7 @@ export class OrderDetailPage implements OnInit {
                 console.log('Ordine confermato definitivamente:', resConfirm);
                 
                 // open invoice modal
-                this.openInvoiceModal(vehicle_id, data.selection);
+                this.openInvoiceModal();
               },
               error: (err) => console.error('Errore conferma ordine:', err)
             });
@@ -101,12 +123,11 @@ export class OrderDetailPage implements OnInit {
     }
   }
 
-  async openInvoiceModal(vehicle_id: number, selection: any) {
+  async openInvoiceModal() {
     const invoice_modal = await this.modalController.create({
       component: OrderInvoiceCreateComponent,
       componentProps: { 
         orderName: this.order?.name,
-        selection: selection 
       },
       breakpoints: [0, 0.5],
       initialBreakpoint: 0.5
@@ -119,5 +140,6 @@ export class OrderDetailPage implements OnInit {
     if (role === 'confirm') {
       //to be continued 
     }
+    else this.loadOrder(); // if the user cancels the second popup, we reload the order to reset any changes done from the first popup
   }
 }
