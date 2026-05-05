@@ -6,7 +6,7 @@ import { map } from 'rxjs/operators';
 import { AuthService } from './auth';
 import { environment } from '../../environments/environment';
 
-const endpoint_products = '/get_all_orders';
+const endpoint_orders = '/get_all_orders';
 const endpoint_vehicle = '/get_daily_vehicle';
 const endpoint_add_products = '/add_products';
 const endpoint_confirm_order = '/post_confirm_order';
@@ -25,10 +25,10 @@ export class OrderService {
     return from(CapacitorHttp.post(options)).pipe(map(res => res.data));
   }
 
-  getProducts(): Observable<any> {
+  getAllOrders(): Observable<any> {
 
     const options = {
-      url: `${environment.baseUrl}${endpoint_products}`,
+      url: `${environment.baseUrl}${endpoint_orders}`,
 
       headers: { 
       'Content-Type': `${environment.type}`,
@@ -46,10 +46,10 @@ export class OrderService {
     return this.response(options);
   }
 
-  getProductById(id: number): Observable<any> {
+  getOrderById(id: number): Observable<any> {
 
     const options = {
-      url: `${environment.baseUrl}${endpoint_products}`,
+      url: `${environment.baseUrl}${endpoint_orders}`,
 
       headers: { 
       'Content-Type': `${environment.type}`,

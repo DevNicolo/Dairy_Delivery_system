@@ -2,7 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { IonHeader, IonToolbar, IonButtons, IonMenuButton, IonTitle, IonContent, IonSpinner, IonList, IonItem, IonLabel, IonNote, IonBadge, IonIcon, IonText } from '@ionic/angular/standalone';
 
-import { ApiService } from '../../services/api';
+import { ProductService } from '../../services/product';
 
 @Component({
   selector: 'app-warehouse',
@@ -15,7 +15,7 @@ export class WarehousePage implements OnInit {
   private activatedRoute = inject(ActivatedRoute);
 
   public apiData: any;
-  private apiService = inject(ApiService);
+  private productService = inject(ProductService);
   constructor() {}
 
   ngOnInit() {
@@ -25,7 +25,7 @@ export class WarehousePage implements OnInit {
   }
 
   getCompleteWarehouse() {
-    this.apiService.getProducts('').subscribe({
+    this.productService.getProducts('').subscribe({
       next: (response) => {
         this.apiData = response.result;
       },

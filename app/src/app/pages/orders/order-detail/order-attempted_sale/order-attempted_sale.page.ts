@@ -6,7 +6,7 @@ import {
   IonButtons, IonList, IonItem, IonLabel, IonInput, IonIcon, 
   IonSpinner
 } from '@ionic/angular/standalone';
-import { ApiService } from '../../../../services/api';
+import { ProductService } from '../../../../services/product';
 import { addIcons } from 'ionicons';
 import { addOutline, removeOutline } from 'ionicons/icons';
 import { ModalController } from '@ionic/angular/standalone';
@@ -25,7 +25,7 @@ export class OrderAttemptedSaleComponent implements OnInit {
   @Input() orderName: string = '';
   
   private modalCtrl = inject(ModalController);
-  private apiService = inject(ApiService);
+  private productService = inject(ProductService);
   
   apiData: any[] = [];
   quantities: { [key: number]: number } = {}; 
@@ -35,7 +35,7 @@ export class OrderAttemptedSaleComponent implements OnInit {
   }
   
   ngOnInit() {
-    this.apiService.getProducts('virtual').subscribe({
+    this.productService.getProducts('virtual').subscribe({
       next: (response) => {
         this.apiData = response.result;
         // Inizialize quantities for each product

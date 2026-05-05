@@ -12,7 +12,7 @@ const endpoint = '/get_all_products';
 @Injectable({
   providedIn: 'root'
 })
-export class ApiService {
+export class ProductService {
 
   private authService = inject(AuthService);
   private orderService = inject(OrderService);

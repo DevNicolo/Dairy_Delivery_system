@@ -39,7 +39,7 @@ export class OrderDetailPage implements OnInit {
   loadOrder() {
     console.log('Loading order with ID:', this.order_id);
     if (this.order_id) {
-      this.orderService.getProductById(parseInt(this.order_id)).subscribe({
+      this.orderService.getOrderById(parseInt(this.order_id)).subscribe({
         next: (response) => {
           console.log('success:', response);
           const [singleOrder] = response.result.orders; // using destructuring to extract the order from the array

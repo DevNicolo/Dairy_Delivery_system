@@ -25,7 +25,7 @@ export class OrdersPage implements OnInit {
   }
 
   loadOrders() {
-    this.orderService.getProducts().subscribe({
+    this.orderService.getAllOrders().subscribe({
       next: (response) => {
         console.log('success:', response);
         this.orders = response.result.orders; // saving the data that arrives
