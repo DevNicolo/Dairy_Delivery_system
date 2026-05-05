@@ -44,9 +44,24 @@ export class OrderAttemptedSaleComponent implements OnInit {
     });
   }
 
-  changeQty(id: number, delta: number) {
+  changeQty(id: number, delta: number, available: number) {
     const newVal = (this.quantities[id] || 0) + delta;
     this.quantities[id] = newVal < 0 ? 0 : newVal;
+
+    // Ensure we don't exceed available stock    
+    if (this.quantities[id] > available) {
+      this.quantities[id] = available;
+    }
+  }
+
+  onQtyChange(id: number, available: number) {
+    let value = Number(this.quantities[id]) || 0;
+    if (value < 0) {
+      value = 0;
+    } else if (value > available) {
+      value = available;
+    }
+    this.quantities[id] = value;
   }
 
   cancel() {
