@@ -11,35 +11,35 @@ import { checkmarkCircleOutline, receiptOutline } from 'ionicons/icons';
   selector: 'app-order-invoice-create',
   templateUrl: './order-invoice-create.component.html',
   styleUrls: ['./order-invoice-create.component.scss'],
-  standalone: true, // Fondamentale per Ionic moderno
+  standalone: true, // Essential for modern Ionic
   imports: [
     IonHeader, IonToolbar, IonTitle, IonContent, IonButton, 
     IonButtons, IonIcon, CommonModule
   ]
 })
 export class OrderInvoiceCreateComponent implements OnInit {
-  // Input ricevuti dal primo popup tramite la pagina di sfondo
+  // Inputs received from the first popup through the background page
   @Input() orderName: string = '';
   @Input() selection: { [key: number]: number } = {};
 
   private modalCtrl = inject(ModalController);
 
   constructor() {
-    // Registriamo le icone che useremo nel template
+    // Register the icons we will use in the template
     addIcons({ checkmarkCircleOutline, receiptOutline });
   }
 
   ngOnInit() {
-    // Debug per verificare che la HashMap sia arrivata correttamente
+    // Debug to verify the HashMap arrived correctly
     console.log('Prodotti da processare nel secondo step:', this.selection);
   }
 
-  // Chiude il popup e annulla tutto il processo
+  // Close the popup and cancel the entire process
   cancel() {
     this.modalCtrl.dismiss(null, 'cancel');
   }
 
-  // Chiude confermando la volontà di creare la fattura
+  // Close confirming the intent to create the invoice
   confirmWithInvoice() {
     this.modalCtrl.dismiss({ 
       generateInvoice: true, 
@@ -47,7 +47,7 @@ export class OrderInvoiceCreateComponent implements OnInit {
     }, 'confirm');
   }
 
-  // Chiude confermando l'aggiunta prodotti ma saltando la fattura
+  // Close confirming product addition but skipping the invoice
   confirmWithoutInvoice() {
     this.modalCtrl.dismiss({ 
       generateInvoice: false, 
