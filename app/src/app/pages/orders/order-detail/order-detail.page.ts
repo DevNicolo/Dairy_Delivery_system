@@ -2,6 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonBackButton, IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonContent, 
+         IonFooter, 
          IonHeader, IonIcon, IonItem, IonLabel, IonList, IonSpinner, IonText, IonTitle, IonToolbar } from '@ionic/angular/standalone';
 import { ActivatedRoute } from '@angular/router';
 import { OrderService } from '../../../services/order';
@@ -18,7 +19,7 @@ import { OrderInvoiceCreateComponent } from './order-invoice-create/order-invoic
   standalone: true,
   imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonBackButton, 
             IonSpinner, IonLabel, IonList, IonItem, IonText, IonIcon, IonCardContent, IonCardTitle, 
-            IonCardSubtitle, IonCard, IonCardHeader, IonButtons, IonButton]
+            IonCardSubtitle, IonCard, IonCardHeader, IonButtons, IonButton, IonFooter]
 })
 export class OrderDetailPage implements OnInit {
 
@@ -119,7 +120,7 @@ export class OrderDetailPage implements OnInit {
       componentProps: { 
         orderName: this.order?.name,
       },
-      breakpoints: [0, 0.5],
+      breakpoints: [0, 0.5, 0.8],
       initialBreakpoint: 0.5
     });
 
