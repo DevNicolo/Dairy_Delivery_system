@@ -70,10 +70,25 @@ class InvoiceCreateAPI(http.Controller):
             _logger.error(f"Error in create_invoice route: {str(e)}")
             return {"status": "error", "message": f"Error during invoice creation: {str(e)}"}
         
+    @http.route('/api/get_invoice_id', type='json', auth='jwt', methods=['POST'], csrf=False)
+    def get_invoice_id(self, **kw):
+        try:
+            order_id = kw.get('order_id')
         
-        
-        
-        
-        
-        
-        
+            if not order_id:
+                return {"error": "ID not found"}
+
+            order = request.env['sale.order'].sudo().browse(order_id)
+            
+            if not order.exists():
+                return {"status": "error", "message": "Order not found"}
+
+            invoice_id = order.invoice_ids[-1].id if order.invoice_ids else None
+
+            return {
+                "status": "success",
+                "invoice_id": invoice_id
+            }
+        except Exception as e:
+            _logger.error(f"Error in get_invoice_id route: {str(e)}")
+            return {"status": "error", "message": f"Error retrieving invoice IDs: {str(e)}"}

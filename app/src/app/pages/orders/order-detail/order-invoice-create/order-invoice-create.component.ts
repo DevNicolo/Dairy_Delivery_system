@@ -2,7 +2,7 @@ import { Component, Input, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { 
   IonHeader, IonToolbar, IonTitle, IonContent, IonButton, 
-  IonButtons, IonIcon, ModalController 
+  IonButtons, IonIcon, ModalController, 
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { checkmarkCircleOutline, receiptOutline } from 'ionicons/icons';
@@ -11,7 +11,7 @@ import { checkmarkCircleOutline, receiptOutline } from 'ionicons/icons';
   selector: 'app-order-invoice-create',
   templateUrl: './order-invoice-create.component.html',
   styleUrls: ['./order-invoice-create.component.scss'],
-  standalone: true, // Essential for modern Ionic
+  standalone: true,
   imports: [
     IonHeader, IonToolbar, IonTitle, IonContent, IonButton, 
     IonButtons, IonIcon, CommonModule
@@ -25,14 +25,10 @@ export class OrderInvoiceCreateComponent implements OnInit {
   private modalCtrl = inject(ModalController);
 
   constructor() {
-    // Register the icons we will use in the template
     addIcons({ checkmarkCircleOutline, receiptOutline });
   }
 
-  ngOnInit() {
-    // Debug to verify the HashMap arrived correctly
-    console.log('Prodotti da processare nel secondo step:', this.selection);
-  }
+  ngOnInit() {}
 
   // Close the popup and cancel the entire process
   cancel() {

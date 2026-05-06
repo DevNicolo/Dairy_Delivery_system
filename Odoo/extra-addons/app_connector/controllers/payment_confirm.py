@@ -57,4 +57,23 @@ class PaymentConfirmAPI(http.Controller):
             _logger.error(f"Error in confirm_payment route: {e}")
             return {"status": "error", "message": f"Error during payment confirmation: {str(e)}"}
         
+    @http.route('/api/get_payment_status', type='json', auth='jwt', methods=['POST'], csrf=False)
+    def get_payment_status(self, **kw):
+        try:
+            invoice_id = kw.get('invoice_id')
         
+            if not invoice_id:
+                return {"error": "Invoice ID not found"}
+
+            invoice = request.env['account.move'].sudo().browse(invoice_id)
+
+            if not invoice.exists():
+                return {"status": "error", "message": "Invoice not found"}
+
+            return {
+                "status": "success",
+                "payment_status": invoice.payment_state
+            }
+        except Exception as e:
+            _logger.error(f"Error in get_payment_status route: {str(e)}")
+            return {"status": "error", "message": f"Error retrieving payment status: {str(e)}"}

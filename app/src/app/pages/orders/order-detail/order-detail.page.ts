@@ -7,10 +7,13 @@ import { IonBackButton, IonButton, IonButtons, IonCard, IonCardContent, IonCardH
 import { ActivatedRoute } from '@angular/router';
 import { OrderService } from '../../../services/order';
 import { addIcons } from 'ionicons';
-import { calendarOutline, locationOutline, downloadOutline, receiptOutline } from 'ionicons/icons';
+import { calendarOutline, locationOutline, downloadOutline, receiptOutline, cashOutline, checkmarkCircleOutline } from 'ionicons/icons';
 import { ModalController } from '@ionic/angular/standalone';
 import { OrderAttemptedSaleComponent } from './order-attempted_sale/order-attempted_sale.page';
 import { OrderInvoiceCreateComponent } from './order-invoice-create/order-invoice-create.component';
+import { InvoiceService } from '../../../services/invoice';
+import { OrderPaymentComponent } from './order-payment/order-payment.component';
+import { PaymentService } from '../../../services/payment';
 
 @Component({
   selector: 'app-order-detail',
@@ -25,16 +28,21 @@ export class OrderDetailPage implements OnInit {
 
   private route = inject(ActivatedRoute);
   private orderService = inject(OrderService);
+  private invoceService = inject(InvoiceService);
+  private paymentService = inject(PaymentService);
   public order_id: string | null = null;
   public order: any;
+  public invoice: any;
+  public invoice_id: number | null = null;
 
   constructor() { 
-    addIcons({ calendarOutline, locationOutline, downloadOutline, receiptOutline })
+    addIcons({ calendarOutline, locationOutline, downloadOutline, receiptOutline, cashOutline, checkmarkCircleOutline })
   }
 
   ngOnInit() {
     this.order_id = this.route.snapshot.paramMap.get('order_id'); // retrieving the order_id parameter from the route to display the details of the selected order
     this.loadOrder();
+    this.loadInvoice();
   }
 
   loadOrder() {
@@ -46,12 +54,31 @@ export class OrderDetailPage implements OnInit {
           const [singleOrder] = response.result.orders; // using destructuring to extract the order from the array
           this.order = singleOrder; // saving the data that arrives
           
+          //check invoice status after order is loaded
+          this.loadInvoice();
           //check delivery status after order is loaded
           this.checkDeliveryStatus();
+          //check payment status after order is loaded
+          this.checkPaymentStatus();
         },
       error: (error) => {
         console.error('error:', error);
       }
+      });
+    }
+  }
+
+  loadInvoice() {
+    if (this.order_id) {
+      this.invoceService.getInvoiceId(parseInt(this.order_id)).subscribe({
+        next: (response) => {
+          console.log('Invoice ID response:', response);
+          this.invoice = response.result.invoice_id;
+          this.invoice_id = response.result.invoice_id;
+        },
+        error: (error) => {
+          console.error('Error fetching invoice ID:', error);
+        }
       });
     }
   }
@@ -74,6 +101,24 @@ export class OrderDetailPage implements OnInit {
       });
     }
   }
+
+  paymentStatus: string = 'unknown';
+  
+  checkPaymentStatus() {
+    if (this.invoice_id) {
+      this.paymentService.getPaymentStatus(this.invoice_id).subscribe({
+        next: (response) => {
+          console.log('Payment status response:', response);
+          this.paymentStatus = response.result.payment_status;
+        },
+        error: (error) => {
+          console.error('Error fetching payment status:', error);
+          this.paymentStatus = 'error';
+        }
+      });
+    }
+  }
+
 
   private modalController = inject(ModalController);
 
@@ -129,8 +174,42 @@ export class OrderDetailPage implements OnInit {
     const { data, role } = await invoice_modal.onWillDismiss();
 
     if (role === 'confirm') {
-      //to be continued 
+      this.invoceService.createInvoice(parseInt(this.order_id!)).subscribe({
+        next: (res) => {
+          console.log('Fattura creata:', res);
+          this.openPaymentModal(); // open payment modal after invoice creation
+        },
+        error: (err) => console.error('Errore creazione fattura:', err)
+      });
     }
     else this.loadOrder(); // if the user cancels the second popup, we reload the order to reset any changes done from the first popup
+  }
+
+  async openPaymentModal() {
+    const payment_modal = await this.modalController.create({
+      component: OrderPaymentComponent,
+      componentProps: { 
+        orderName: this.order?.name,
+        orderTotal: this.order?.total,
+      },
+      breakpoints: [0, 0.5, 1],
+      initialBreakpoint: 0.5
+    });
+
+    await payment_modal.present();
+
+    const { data, role } = await payment_modal.onWillDismiss();
+
+    if (role === 'confirm' && data?.generatePayment) {
+      this.paymentService.confirmPayment(this.invoice_id!, data.paymentMethod, data.amount).subscribe({
+        next: (res) => {
+          console.log('Pagamento confermato:', res);
+          this.loadOrder(); // reload order to update the payment status
+        },
+        error: (err) => console.error('Errore conferma pagamento:', err)
+      });
+      console.log('Generazione pagamento richiesta');
+    }
+    else this.loadOrder(); // if the user cancels the payment popup, we reload the order to reset any changes done from the previous popups 
   }
 }
