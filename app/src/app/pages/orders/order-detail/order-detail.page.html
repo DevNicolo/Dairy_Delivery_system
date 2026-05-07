@@ -98,25 +98,20 @@
           </h1>
         </div>
 
-          <ion-button *ngIf="(deliveryStatus === 'draft' || deliveryStatus === 'confirmed' || deliveryStatus === 'assigned') && !invoice_id && paymentStatus !== 'paid'" expand="block" fill="outline" color="light" (click)="openConfirmModal()">
+          <ion-button *ngIf="(deliveryStatus === 'draft' || deliveryStatus === 'confirmed' || deliveryStatus === 'assigned')" expand="block" fill="outline" color="light" (click)="openConfirmModal()">
             <ion-icon name="download-outline" slot="start"></ion-icon>
             Procedi alla conferma
           </ion-button>
 
-          <ion-button *ngIf="(deliveryStatus === 'done') && !invoice_id && paymentStatus !== 'paid'" expand="block" fill="outline" color="light" (click)="openInvoiceModal()">
+          <ion-button *ngIf="(deliveryStatus === 'done') && !invoice_id" expand="block" fill="outline" color="light" (click)="openInvoiceModal()">
             <ion-icon name="receipt-outline" slot="start"></ion-icon>
             Genera fattura
           </ion-button>
 
-          <ion-button *ngIf="invoice_id && paymentStatus !== 'paid'" expand="block" fill="outline" color="light" (click)="openPaymentModal()">
+          <ion-button *ngIf="invoice_id && paymentStatus !== 'paid'" [disabled]="!invoice_id" expand="block" fill="outline" color="light" (click)="openPaymentModal()">
             <ion-icon name="cash-outline" slot="start"></ion-icon>
             Effettua pagamento
           </ion-button>          
-
-          <ion-button *ngIf="deliveryStatus === 'cancel'" expand="block" fill="outline" color="light" disabled>
-            <ion-icon name="close-circle-outline" slot="start"></ion-icon>
-            Ordine Annullato
-          </ion-button>
 
           <div *ngIf="paymentStatus === 'paid'" class="ion-text-center ion-margin-top">
             <ion-icon name="checkmark-circle-outline" color="success" style="font-size: 24px;"></ion-icon>

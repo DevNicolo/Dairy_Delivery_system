@@ -53,7 +53,6 @@ export class OrderDetailPage implements OnInit {
           console.log('success:', response);
           const [singleOrder] = response.result.orders; // using destructuring to extract the order from the array
           this.order = singleOrder; // saving the data that arrives
-          
           //check invoice status after order is loaded
           this.loadInvoice();
           //check delivery status after order is loaded
@@ -103,6 +102,7 @@ export class OrderDetailPage implements OnInit {
   }
 
   paymentStatus: string = 'unknown';
+  paymentAmountResidual: number = 0;
   
   checkPaymentStatus() {
     if (this.invoice_id) {
@@ -110,6 +110,7 @@ export class OrderDetailPage implements OnInit {
         next: (response) => {
           console.log('Payment status response:', response);
           this.paymentStatus = response.result.payment_status;
+          this.paymentAmountResidual = response.result.amount_residual;
         },
         error: (error) => {
           console.error('Error fetching payment status:', error);
@@ -173,11 +174,12 @@ export class OrderDetailPage implements OnInit {
 
     const { data, role } = await invoice_modal.onWillDismiss();
 
-    if (role === 'confirm') {
+    if (role === 'confirm' && data?.generateInvoice) {
       this.invoceService.createInvoice(parseInt(this.order_id!)).subscribe({
         next: (res) => {
           console.log('Fattura creata:', res);
           this.openPaymentModal(); // open payment modal after invoice creation
+          this.loadOrder(); // reload order to update the invoice status
         },
         error: (err) => console.error('Errore creazione fattura:', err)
       });
@@ -191,6 +193,7 @@ export class OrderDetailPage implements OnInit {
       componentProps: { 
         orderName: this.order?.name,
         orderTotal: this.order?.total,
+        amountResidual: this.paymentAmountResidual,
       },
       breakpoints: [0, 0.5, 1],
       initialBreakpoint: 0.5

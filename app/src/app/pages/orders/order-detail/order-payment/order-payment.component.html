@@ -12,6 +12,7 @@
   <div class="ion-text-center ion-padding-vertical">
     <p style="color: #666; margin-bottom: 5px;">Totale ordine <b>#{{ orderName }}</b></p>
     <h1 style="font-size: 32px; font-weight: bold; margin-top: 0;">€ {{ orderTotal.toFixed(2) }}</h1>
+    <h3 *ngIf="(amountResidual > 0) && amountResidual !== orderTotal" style="color: #ff5722; margin-top: 10px;">Importo residuo: € {{ amountResidual.toFixed(2) }}</h3>
   </div>
 
   <!-- Selezione Metodo di Pagamento -->
@@ -57,6 +58,7 @@
           type="number" 
           inputmode="decimal"
           [(ngModel)]="amountPaid" 
+          (ionChange)="AmountControl(0)"
           [disabled]="isFullPayment"
           placeholder="0.00">
         </ion-input>

@@ -24,6 +24,7 @@ export class OrderPaymentComponent  implements OnInit {
 
   @Input() orderName: string = '';
   @Input() orderTotal: number = 0;
+  @Input() amountResidual: number = 0;
 
   paymentMethod: string = '';
   isFullPayment: boolean = true;
@@ -53,9 +54,19 @@ export class OrderPaymentComponent  implements OnInit {
 
   onToggleFullPayment() {
     if (this.isFullPayment) {
-      this.amountPaid = this.orderTotal; // if full payment is toggled on, set the amount paid to the total of the order
+      this.amountPaid = this.amountResidual; // if full payment is toggled on, set the amount paid to the total of the order
     } else {
       this.amountPaid = 0; // else reset the amount paid to 0, so that the user can input the desired amount in the textarea
+    }
+  }
+
+  AmountControl(delta: number) {
+    const newVal = (this.amountPaid || 0) + delta;
+    this.amountPaid = newVal < 0 ? 0 : newVal;
+
+    // Ensure we don't exceed the residual amount    
+    if (this.amountPaid > this.amountResidual) {
+      this.amountPaid = this.amountResidual;
     }
   }
   

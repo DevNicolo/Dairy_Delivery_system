@@ -72,7 +72,8 @@ class PaymentConfirmAPI(http.Controller):
 
             return {
                 "status": "success",
-                "payment_status": invoice.payment_state
+                "payment_status": invoice.payment_state,
+                "amount_residual": invoice.amount_residual
             }
         except Exception as e:
             _logger.error(f"Error in get_payment_status route: {str(e)}")
