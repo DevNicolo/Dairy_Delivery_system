@@ -1,0 +1,172 @@
+// Sfondo della pagina
+.page-background {
+  --background: #f8f9fa;
+}
+
+// Intestazione Pagina
+.page-header {
+  margin-bottom: 1.5rem;
+  padding-left: 0.5rem;
+
+  .main-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #222428;
+    margin: 0;
+  }
+
+  .sub-title {
+    font-size: 1rem;
+    color: #666666;
+    margin-top: 0.3rem;
+  }
+}
+
+// Stile delle Card degli Ordini
+.order-card {
+  margin: 0 0 1.5rem 0;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.04);
+  border: none;
+
+  .order-header {
+    padding-bottom: 0;
+  }
+
+  .header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px dashed #e0e0e0;
+    padding-bottom: 1rem;
+
+    .order-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #222428;
+    }
+
+    .order-date {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.85rem;
+      color: #666666;
+      background: #f0f2f5;
+      padding: 0.4rem 0.8rem;
+      border-radius: 20px;
+      font-weight: 500;
+      
+      ion-icon {
+        font-size: 1rem;
+        color: var(--ion-color-primary);
+      }
+    }
+  }
+
+  .info-list {
+    margin-top: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .info-item {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    .icon-box {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: rgba(var(--ion-color-primary-rgb), 0.08);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-right: 12px;
+
+      ion-icon {
+        font-size: 1.2rem;
+        color: var(--ion-color-primary);
+      }
+    }
+
+    .info-text {
+      display: flex;
+      flex-direction: column;
+
+      .label {
+        font-size: 0.8rem;
+        color: #888888;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .value {
+        font-size: 0.95rem;
+        color: #222428;
+        font-weight: 600;
+        margin-top: 0.1rem;
+      }
+    }
+  }
+
+  .detail-btn {
+    --border-width: 2px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    margin-top: 1rem;
+  }
+}
+
+// Stile per Stati Vuoto / Caricamento
+.state-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 4rem 2rem;
+  margin-top: 2rem;
+
+  .state-icon-wrapper {
+    width: 80px;
+    height: 80px;
+    background: #ffffff;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+    margin-bottom: 1.5rem;
+
+    ion-icon {
+      font-size: 2.5rem;
+      color: #bbbbbb;
+    }
+  }
+
+  .state-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #222428;
+    margin: 0;
+  }
+
+  .state-subtitle {
+    font-size: 1rem;
+    color: #888888;
+    margin-top: 0.5rem;
+    line-height: 1.5;
+  }
+
+  .custom-spinner {
+    transform: scale(1.5);
+    margin-bottom: 1rem;
+  }
+}

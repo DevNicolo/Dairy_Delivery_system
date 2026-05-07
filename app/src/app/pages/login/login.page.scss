@@ -1,7 +1,75 @@
-div.login-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    }
+// Imposta uno sfondo leggermente grigio/off-white
+ion-content {
+  --background: #f8f9fa; 
+}
+
+.header-section {
+  margin-top: 3rem;
+  margin-bottom: 3rem;
+
+  .logo-placeholder ion-icon {
+    font-size: 4.5rem;
+    padding: 1rem;
+    background: rgba(var(--ion-color-primary-rgb), 0.1);
+    border-radius: 50%;
+    margin-bottom: 1rem;
+  }
+
+  .title {
+    font-weight: 700;
+    font-size: 2rem;
+    margin: 0;
+    color: #222428;
+    letter-spacing: -0.5px;
+  }
+
+  .subtitle {
+    color: #666666;
+    margin-top: 0.5rem;
+    font-size: 1rem;
+  }
+}
+
+.bg-transparent {
+  background: transparent;
+}
+
+
+.modern-input {
+  --background: #ffffff;
+  --color: #222428;
+  --placeholder-color: #888888;
+  
+  --border-radius: 16px;
+  --padding-start: 16px;
+  --inner-padding-end: 16px;
+  
+  // Ombra morbida
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+  margin-bottom: 1.5rem;
+  
+  .input-icon {
+    color: #666666;
+    margin-right: 12px;
+    margin-top: 18px; 
+  }
+
+  ion-label {
+    color: #666666 !important;
+    font-weight: 500;
+  }
+
+  ion-input {
+    font-weight: 500;
+  }
+}
+
+
+.login-btn {
+  --box-shadow: 0 8px 20px rgba(var(--ion-color-primary-rgb), 0.3);
+  height: 56px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-top: 2.5rem;
+  letter-spacing: 0.5px;
+}

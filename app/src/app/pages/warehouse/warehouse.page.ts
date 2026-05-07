@@ -3,12 +3,13 @@ import { ActivatedRoute } from '@angular/router';
 import { IonHeader, IonToolbar, IonButtons, IonMenuButton, IonTitle, IonContent, IonSpinner, IonList, IonItem, IonLabel, IonNote, IonBadge, IonIcon, IonText } from '@ionic/angular/standalone';
 
 import { ProductService } from '../../services/product';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-warehouse',
   templateUrl: './warehouse.page.html',
   styleUrls: ['./warehouse.page.scss'],
-  imports: [IonHeader, IonToolbar, IonButtons, IonMenuButton, IonTitle, IonContent, IonSpinner, IonList, IonItem, IonLabel, IonNote, IonBadge, IonIcon, IonText],
+  imports: [CommonModule, IonHeader, IonToolbar, IonButtons, IonMenuButton, IonTitle, IonContent, IonSpinner, IonList, IonItem, IonLabel, IonNote, IonBadge, IonIcon, IonText],
 })
 export class WarehousePage implements OnInit {
   public home!: string;

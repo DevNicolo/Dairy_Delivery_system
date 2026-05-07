@@ -2,7 +2,8 @@ import { Component, Input, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { 
   IonHeader, IonToolbar, IonTitle, IonContent, IonButton, 
-  IonButtons, IonIcon, ModalController, 
+  IonButtons, IonIcon, ModalController,
+  IonFooter, 
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { checkmarkCircleOutline, receiptOutline } from 'ionicons/icons';
@@ -14,7 +15,7 @@ import { checkmarkCircleOutline, receiptOutline } from 'ionicons/icons';
   standalone: true,
   imports: [
     IonHeader, IonToolbar, IonTitle, IonContent, IonButton, 
-    IonButtons, IonIcon, CommonModule
+    IonButtons, IonIcon, CommonModule, IonFooter
   ]
 })
 export class OrderInvoiceCreateComponent implements OnInit {

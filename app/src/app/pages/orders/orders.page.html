@@ -1,41 +1,94 @@
-<ion-header [translucent]="true">
+<ion-header class="ion-no-border" [translucent]="true">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-menu-button></ion-menu-button>
+      <ion-menu-button color="primary"></ion-menu-button>
     </ion-buttons>
-    <ion-title>I miei ordini</ion-title>
+    <ion-title class="ion-text-center">I miei ordini</ion-title>
+
+    <ion-buttons slot="end">
+      <div style="width: 48px;"></div>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">I miei ordini</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content [fullscreen]="true" class="page-background">
 
+
+  
   <div class="ion-padding">
+    
+
+    <div class="page-header">
+      <h1 class="main-title">Storico Ordini</h1>
+      <p class="sub-title">Monitora le tue consegne</p>
+    </div>
+
     @if (orders && orders.length > 0) {
-      <ion-list>
+      <div class="orders-list">
         @for (order of orders; track order.id) {
-          <ion-item>
-            <ion-label>
-              <h1>Ordine #{{ order.name }}</h1>
-              <h2>Cliente: {{ order.partner_id }}</h2>
-              <p>Data: {{ order.date_order }}</p>
-              <p>Zona: {{ order.shipping_city }}</p>
-              <p>Indirizzo: {{ order.street }}</p>
-            </ion-label>
-            <ion-button fill="outline" slot="end" routerLink="/order-detail/{{ order.order_id }}">Dettagli</ion-button>
-          </ion-item>
+          <ion-card class="order-card">
+            <ion-card-header class="order-header">
+              <div class="header-content">
+                <ion-card-title class="order-title">#{{ order.name }}</ion-card-title>
+                <div class="order-date">
+                  <ion-icon name="calendar-outline"></ion-icon>
+                  <span>{{ order.date_order }}</span>
+                </div>
+              </div>
+            </ion-card-header>
+
+            <ion-card-content>
+              <div class="info-list">
+                <div class="info-item">
+                  <div class="icon-box">
+                    <ion-icon name="person-outline"></ion-icon>
+                  </div>
+                  <div class="info-text">
+                    <span class="label">Cliente</span>
+                    <span class="value">{{ order.partner_id }}</span>
+                  </div>
+                </div>
+
+                <div class="info-item">
+                  <div class="icon-box">
+                    <ion-icon name="location-outline"></ion-icon>
+                  </div>
+                  <div class="info-text">
+                    <span class="label">Zona</span>
+                    <span class="value">{{ order.shipping_city }}</span>
+                  </div>
+                </div>
+
+                <div class="info-item">
+                  <div class="icon-box">
+                    <ion-icon name="map-outline"></ion-icon>
+                  </div>
+                  <div class="info-text">
+                    <span class="label">Indirizzo</span>
+                    <span class="value">{{ order.street }}</span>
+                  </div>
+                </div>
+              </div>
+
+              <ion-button expand="block" shape="round" class="detail-btn" routerLink="/order-detail/{{ order.order_id }}" fill="outline">
+                Vedi Dettagli
+              </ion-button>
+            </ion-card-content>
+          </ion-card>
         }
-      </ion-list>
+      </div>
     } @else if (orders && orders.length === 0) {
-      <p>Nessun ordine trovato.</p>
+      <div class="state-container">
+        <div class="state-icon-wrapper">
+          <ion-icon name="cube-outline"></ion-icon>
+        </div>
+        <h2 class="state-title">Nessun ordine</h2>
+        <p class="state-subtitle">Non ci sono ordini da mostrare in questo momento.</p>
+      </div>
     } @else {
-      <div class="ion-text-center ion-padding" style="margin-top: 40px;">
-        <ion-spinner name="crescent" color="primary"></ion-spinner>
-        <p>Caricamento ordini in corso...</p>
+      <div class="state-container">
+        <ion-spinner name="crescent" color="primary" class="custom-spinner"></ion-spinner>
+        <p class="state-subtitle">Caricamento ordini in corso...</p>
       </div>
     }
    </div>

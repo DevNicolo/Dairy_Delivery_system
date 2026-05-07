@@ -1,30 +1,38 @@
-<ion-header>
-  <ion-toolbar color="primary">
-    <ion-title>Aggiungi prodotti</ion-title>
+<ion-header class="ion-no-border" [translucent]="true">
+  <ion-toolbar>
+    <ion-title class="ion-text-center">Aggiungi articoli</ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="cancel()">Annulla</ion-button>
+      <ion-button (click)="cancel()" color="medium" style="font-weight: 600;">Annulla</ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-  <div class="ion-padding-bottom">
-    <p>Vuoi aggiungere altro all'ordine <b>{{ orderName }}</b>?</p>
+<ion-content [fullscreen]="true" class="ion-padding page-bg">
+  
+  <div style="margin-bottom: 20px;">
+    <h2 style="font-weight: 700; margin-bottom: 5px; margin-top: 10px;">Catalogo</h2>
+    <p style="color: gray; margin-top: 0;">Aggiungi prodotti all'ordine <b style="color: var(--ion-color-primary);">#{{ orderName }}</b></p>
   </div>
 
   @if (apiData && apiData.length > 0) {
-    <ion-list lines="full">
+    
+    <div class="product-list">
       @for (product of apiData; track product.id) {
-        <ion-item>
-          <ion-label>
-            <h2 style="font-weight: bold;">{{ product.name }}</h2>
-            <p>Prezzo: € {{ product.list_price }}</p>
-            <p>Disponibilità: {{ product.virtual_available }}</p>
-          </ion-label>
+        <ion-card class="product-card">
+          
+          <div class="product-info">
+            <h3 class="product-name">{{ product.name }}</h3>
+            <div class="product-meta">
+              <span class="price">€ {{ product.list_price }}</span>
+              <span class="stock">
+                <ion-icon name="cube-outline"></ion-icon> Disp: {{ product.virtual_available }}
+              </span>
+            </div>
+          </div>
 
-          <div slot="end" style="display: flex; align-items: center; background: #f4f4f4; border-radius: 8px;">
-            <ion-button fill="clear" (click)="changeQty(product.id, -1, product.virtual_available)">
-              <ion-icon name="remove-outline" slot="icon-only"></ion-icon>
+          <div class="stepper-control">
+            <ion-button fill="clear" class="step-btn" (click)="changeQty(product.id, -1, product.virtual_available)">
+              <ion-icon name="remove" slot="icon-only"></ion-icon>
             </ion-button>
 
             <ion-input 
@@ -34,25 +42,34 @@
               [max]="product.virtual_available"
               [(ngModel)]="quantities[product.id]" 
               (ionChange)="onQtyChange(product.id, product.virtual_available)"
-              style="width: 45px; text-align: center; font-weight: bold;">
+              class="step-input">
             </ion-input>
 
-            <ion-button fill="clear" (click)="changeQty(product.id, 1, product.virtual_available)">
-              <ion-icon name="add-outline" slot="icon-only"></ion-icon>
+            <ion-button fill="clear" class="step-btn" (click)="changeQty(product.id, 1, product.virtual_available)">
+              <ion-icon name="add" slot="icon-only"></ion-icon>
             </ion-button>
           </div>
-        </ion-item>
-      }
-    </ion-list>
 
-    <ion-button expand="block" (click)="confirm()" class="ion-margin-top">
-      Conferma Ordine
-    </ion-button>
+        </ion-card>
+      }
+    </div>
 
   } @else {
     <div class="ion-text-center ion-padding" style="margin-top: 40px;">
-      <ion-spinner name="crescent" color="primary"></ion-spinner>
-      <p>Recupero prodotti disponibili...</p>
+      <ion-spinner name="crescent" color="primary" style="transform: scale(1.5); margin-bottom: 15px;"></ion-spinner>
+      <p style="color: gray;">Recupero prodotti disponibili...</p>
     </div>
   }
+
 </ion-content>
+ 
+@if (apiData && apiData.length > 0) {
+  <ion-footer>
+    <ion-toolbar class="ion-padding-horizontal ion-padding-bottom">
+      <ion-button expand="block" shape="round" color="primary" (click)="confirm()" style="height: 54px; font-weight: bold; font-size: 1.1em; margin-top: 10px;">
+        <ion-icon name="checkmark-circle-outline" slot="start"></ion-icon>
+        Conferma Ordine
+      </ion-button>
+    </ion-toolbar>
+  </ion-footer>
+}

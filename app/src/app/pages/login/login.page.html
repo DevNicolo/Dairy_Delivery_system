@@ -1,32 +1,50 @@
-<ion-header [translucent]="true">
+<ion-header class="ion-no-border" [translucent]="true">
   <ion-toolbar>
-    <ion-title>login</ion-title>
+    <ion-title class="ion-text-center">Login</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">login</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content [fullscreen]="true" class="ion-padding">
+  
+  <div class="header-section ion-text-center">
+    <div class="logo-placeholder">
+      <ion-icon name="finger-print-outline" color="primary"></ion-icon>
+    </div>
+    <h1 class="title">Bentornato!</h1>
+    <p class="subtitle">Effettua l'accesso per continuare</p>
+  </div>
 
   <div class="login-container">
     <form (ngSubmit)="doLogin()">
-      <ion-list>
-        <ion-item>
-          <ion-label position="stacked">Username</ion-label>
-          <ion-input [(ngModel)]="username" name="username" type="text" placeholder="Inserisci username"></ion-input>
+      <ion-list lines="none" class="bg-transparent">
+        
+        <!-- Username Input -->
+        <ion-item class="modern-input">
+          <ion-icon name="person-outline" slot="start" class="input-icon"></ion-icon>
+          <ion-label position="floating">Username</ion-label>
+          <ion-input 
+            [(ngModel)]="username" 
+            name="username" 
+            type="text">
+          </ion-input>
         </ion-item>
 
-        <ion-item>
-          <ion-label position="stacked">Password</ion-label>
-          <ion-input [(ngModel)]="password" name="password" type="password" placeholder="Inserisci password"></ion-input>
+        <!-- Password Input -->
+        <ion-item class="modern-input">
+          <ion-icon name="lock-closed-outline" slot="start" class="input-icon"></ion-icon>
+          <ion-label position="floating">Password</ion-label>
+          <ion-input 
+            [(ngModel)]="password" 
+            name="password" 
+            type="password">
+          </ion-input>
         </ion-item>
+        
       </ion-list>
 
-      <ion-button tyoe="submit" expand="block" class="ion-margin-top" type="submit">
+      <ion-button shape="round" expand="block" class="login-btn ion-margin-top" type="submit">
         Accedi
+        <ion-icon slot="end" name="arrow-forward-outline"></ion-icon>
       </ion-button>
     </form>
   </div>

@@ -1,13 +1,12 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonBackButton, IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonContent, 
-         IonFooter, 
-         IonHeader, IonIcon, IonItem, IonLabel, IonList, IonSpinner, IonText, IonTitle, IonToolbar } from '@ionic/angular/standalone';
+import { IonBackButton, IonButton, IonButtons, IonContent, IonFooter, 
+         IonHeader, IonIcon, IonSpinner, IonTitle, IonToolbar } from '@ionic/angular/standalone';
 import { ActivatedRoute } from '@angular/router';
 import { OrderService } from '../../../services/order';
 import { addIcons } from 'ionicons';
-import { calendarOutline, locationOutline, downloadOutline, receiptOutline, cashOutline, checkmarkCircleOutline } from 'ionicons/icons';
+import { calendarOutline, locationOutline, downloadOutline, receiptOutline, cashOutline, checkmarkCircle } from 'ionicons/icons';
 import { ModalController } from '@ionic/angular/standalone';
 import { OrderAttemptedSaleComponent } from './order-attempted_sale/order-attempted_sale.page';
 import { OrderInvoiceCreateComponent } from './order-invoice-create/order-invoice-create.component';
@@ -21,8 +20,7 @@ import { PaymentService } from '../../../services/payment';
   styleUrls: ['./order-detail.page.scss'],
   standalone: true,
   imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonBackButton, 
-            IonSpinner, IonLabel, IonList, IonItem, IonText, IonIcon, IonCardContent, IonCardTitle, 
-            IonCardSubtitle, IonCard, IonCardHeader, IonButtons, IonButton, IonFooter]
+            IonSpinner, IonIcon, IonButtons, IonButton, IonFooter]
 })
 export class OrderDetailPage implements OnInit {
 
@@ -36,7 +34,7 @@ export class OrderDetailPage implements OnInit {
   public invoice_id: number | null = null;
 
   constructor() { 
-    addIcons({ calendarOutline, locationOutline, downloadOutline, receiptOutline, cashOutline, checkmarkCircleOutline })
+    addIcons({ calendarOutline, locationOutline, downloadOutline, receiptOutline, cashOutline, checkmarkCircle })
   }
 
   ngOnInit() {
@@ -130,7 +128,7 @@ export class OrderDetailPage implements OnInit {
     const attempted_sale_modal = await this.modalController.create({
       component: OrderAttemptedSaleComponent,
       componentProps: { orderName: this.order?.name },
-      breakpoints: [0, 0.5, 0.8],
+      breakpoints: [0, 0.5, 1],
       initialBreakpoint: 0.5
     });
 
@@ -166,7 +164,7 @@ export class OrderDetailPage implements OnInit {
       componentProps: { 
         orderName: this.order?.name,
       },
-      breakpoints: [0, 0.5, 0.8],
+      breakpoints: [0, 0.5, 1],
       initialBreakpoint: 0.5
     });
 

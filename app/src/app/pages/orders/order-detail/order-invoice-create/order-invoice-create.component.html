@@ -1,33 +1,42 @@
-<ion-header>
-  <ion-toolbar color="success">
-    <ion-title>Consegna Registrata</ion-title>
+<ion-header class="ion-no-border" [translucent]="true">
+  <ion-toolbar>
+    <ion-title class="ion-text-center">Consegna</ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="cancel()">Annulla</ion-button>
+      <ion-button (click)="cancel()" color="medium" style="font-weight: 600;">Chiudi</ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-  <div class="ion-text-center ion-padding-vertical">
-    <ion-icon name="checkmark-circle-outline" color="success" style="font-size: 70px;"></ion-icon>
-    <h2 style="font-weight: bold;">Ottimo lavoro!</h2>
-    <p>La consegna per <b>{{ orderName }}</b> è stata effettuata.</p>
+<ion-content [fullscreen]="true" class="ion-padding page-bg">
+  
+  <div class="success-hero">
+    <div class="icon-wrapper">
+      <ion-icon name="checkmark-circle-outline" color="success"></ion-icon>
+    </div>
+    <h2 class="main-title">Ottimo lavoro!</h2>
+    <p class="sub-title">La consegna per <b style="color: var(--ion-color-success);">#{{ orderName }}</b> è stata registrata con successo.</p>
   </div>
 
-  <div class="ion-margin-top ion-padding" style="background: #f9f9f9; border-radius: 12px; border: 1px solid #eee;">
-    <p class="ion-text-center" style="margin: 0;">
-      <ion-icon name="receipt-outline" style="vertical-align: middle; margin-right: 5px;"></ion-icon>
-      Vuoi generare subito la <b>fattura</b>?
-    </p>
+  <div class="info-card">
+    <ion-icon name="receipt-outline" class="card-icon" color="primary"></ion-icon>
+    <div class="card-text">
+      <h3>Fatturazione</h3>
+      <p>Vuoi generare subito la fattura per questo ordine?</p>
+    </div>
   </div>
 
-  <div class="ion-margin-top">
-    <ion-button expand="block" color="success" (click)="confirmWithInvoice()">
+</ion-content>
+
+<ion-footer class="ion-no-border">
+  <ion-toolbar class="ion-padding-horizontal ion-padding-bottom">
+    
+    <ion-button expand="block" shape="round" color="success" (click)="confirmWithInvoice()" style="height: 54px; font-weight: bold; font-size: 1.1em; margin-top: 10px;">
       Sì, genera fattura
     </ion-button>
 
-    <ion-button expand="block" fill="clear" color="medium" (click)="confirmWithoutInvoice()">
+    <ion-button expand="block" fill="clear" color="medium" (click)="confirmWithoutInvoice()" style="height: 54px; font-weight: 600; font-size: 1em; margin-top: 5px;">
       No, solo consegna
     </ion-button>
-  </div>
-</ion-content>
+
+  </ion-toolbar>
+</ion-footer>

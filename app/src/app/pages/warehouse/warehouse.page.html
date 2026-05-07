@@ -1,71 +1,79 @@
-<ion-header [translucent]="true">
+<ion-header class="ion-no-border" [translucent]="true">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-menu-button></ion-menu-button>
+      <ion-menu-button color="primary"></ion-menu-button>
     </ion-buttons>
-    <ion-title>Il mio magazzino</ion-title>
+    <ion-title class="ion-text-center">Magazzino</ion-title>
+    <ion-buttons slot="end">
+      <div style="width: 48px;"></div>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Il mio magazzino</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
+<ion-content [fullscreen]="true" class="page-background">
   <div class="ion-padding">
+    
+    <div class="page-header">
+      <h1 class="main-title">Il mio magazzino</h1>
+      <p class="sub-title">Gestisci e monitora i tuoi prodotti</p>
+    </div>
+
     @if (apiData && apiData.length > 0) {
-      <ion-list lines="full">
+      <div class="inventory-list">
         @for (product of apiData; track product.id) {
-          <ion-item>
-            <ion-label>
-              <h2 style="font-weight: bold; color: var(--ion-color-dark); margin-bottom: 8px;">
-                {{ product.name }}
-              </h2>
+          <div class="inventory-card">
+            
+            <div class="card-top">
+              <div class="product-info">
+                <h3 class="product-name">{{ product.name }}</h3>
+                <div class="badge-group">
+                  <span class="custom-badge code-badge">
+                    <ion-icon name="barcode-outline"></ion-icon>
+                    {{ product.default_code || 'N/D' }}
+                  </span>
+                  <span class="custom-badge category-badge">
+                    <ion-icon name="pricetag-outline"></ion-icon>
+                    {{ product.category }}
+                  </span>
+                </div>
+              </div>
               
-              <p style="margin-bottom: 6px;">
-                <ion-badge color="light" mode="ios">
-                  Cod: {{ product.default_code || 'N/D' }}
-                </ion-badge>
-                <ion-badge color="secondary" mode="ios" class="ion-margin-start">
-                  Categoria: {{ product.category }}
-                </ion-badge>
-              </p>
-
-              <div style="display: flex; gap: 15px; margin-top: 10px;">
-                <p style="margin: 0;">
-                  Quantità Totale: 
-                  <b>
-                    <ion-text [color]="product.qty_available > 0 ? 'success' : 'danger'">
-                      {{ product.qty_available }}
-                    </ion-text>
-                  </b>
-                </p>
-                <p style="margin: 0;">
-                  Quantità Effettiva: <b>{{ product.virtual_available }}</b>
-                </p>
+              <div class="price-box">
+                <span class="price-value">€ {{ product.list_price.toFixed(2) }}</span>
+                <span class="price-label">Listino</span>
               </div>
-            </ion-label>
+            </div>
 
-            <ion-note slot="end" class="ion-text-right">
-              <div style="font-size: 1.2em; font-weight: bold; color: var(--ion-color-primary);">
-                {{ product.list_price.toFixed(2) }} €
+            <div class="divider"></div>
+
+            <div class="card-bottom">
+              <div class="qty-stat">
+                <span class="stat-label">Quantità Totale</span>
+                <span class="stat-value" [ngClass]="product.qty_available > 0 ? 'text-success' : 'text-danger'">
+                  {{ product.qty_available }}
+                </span>
               </div>
-              <p style="font-size: 0.75em; margin: 0;">Prezzo listino</p>
-            </ion-note>
-          </ion-item>
+              <div class="qty-stat">
+                <span class="stat-label">Quantità Effettiva</span>
+                <span class="stat-value">{{ product.virtual_available }}</span>
+              </div>
+            </div>
+
+          </div>
         }
-      </ion-list>
+      </div>
     } @else if (apiData && apiData.length === 0) {
-      <div class="ion-text-center ion-padding" style="margin-top: 40px;">
-        <ion-icon name="archive-outline" style="font-size: 64px; color: #ccc;"></ion-icon>
-        <p>Nessun prodotto disponibile nel catalogo.</p>
+      <div class="state-container">
+        <div class="state-icon-wrapper">
+          <ion-icon name="archive-outline"></ion-icon>
+        </div>
+        <h2 class="state-title">Nessun prodotto</h2>
+        <p class="state-subtitle">Non ci sono prodotti disponibili nel catalogo.</p>
       </div>
     } @else {
-      <div class="ion-text-center ion-padding" style="margin-top: 40px;">
-        <ion-spinner name="crescent" color="primary"></ion-spinner>
-        <p>Caricamento prodotti in corso...</p>
+      <div class="state-container">
+        <ion-spinner name="crescent" color="primary" class="custom-spinner"></ion-spinner>
+        <p class="state-subtitle">Caricamento prodotti in corso...</p>
       </div>
     }
   </div>

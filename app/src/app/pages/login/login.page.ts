@@ -1,18 +1,22 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonInput, IonButton, IonLabel, IonList, IonItem, MenuController } from '@ionic/angular/standalone';
+import { IonContent, IonHeader, IonTitle, IonToolbar, IonInput, IonButton, IonLabel, IonList, IonItem, MenuController, IonIcon } from '@ionic/angular/standalone';
 
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth';
 import { UserService } from '../../services/user';
+import { addIcons } from 'ionicons';
+import { fingerPrintOutline, personOutline, lockClosedOutline, arrowForwardOutline } from 'ionicons/icons';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, IonInput, IonButton, IonLabel, IonList, IonItem, CommonModule, FormsModule]
+  imports: [IonContent, IonHeader, IonTitle, IonToolbar, IonInput, IonButton, 
+            IonLabel, IonList, IonItem, CommonModule, FormsModule, IonIcon,
+            ]
 })
 export class LoginPage implements OnInit {
 
@@ -37,7 +41,9 @@ export class LoginPage implements OnInit {
   authService = inject(AuthService);
   userService = inject(UserService);
   
-  constructor() { }
+  constructor() { 
+    addIcons({ fingerPrintOutline, personOutline, lockClosedOutline, arrowForwardOutline, });
+  }
 
   ngOnInit() {
   }
@@ -50,7 +56,7 @@ export class LoginPage implements OnInit {
       next: (response) => {
         if(response && response.token) {
           this.authService.setToken(response.token);
-          this.router.navigate(['/home']);
+          this.router.navigate(['/home/orders']);
           this.userService.getUserInfo().subscribe({  // Fetch user info after successful login
             next: (response) => { 
               this.userService.userDisplayName.set(response?.result?.user_info?.name); // Update the signal with the user's display name

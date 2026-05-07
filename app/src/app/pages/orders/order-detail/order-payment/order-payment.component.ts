@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, Input, OnInit } from '@angular/core';
-import { IonButton, IonButtons, IonCheckbox, IonContent, IonHeader, 
+import { IonButton, IonButtons, IonCheckbox, IonContent, IonFooter, IonHeader, 
          IonIcon, IonInput, IonItem, IonLabel, IonList, IonRadio, 
          IonRadioGroup, IonTitle, IonToolbar, 
          ModalController } from '@ionic/angular/standalone';
@@ -17,7 +17,7 @@ import { cashOutline, cardOutline, businessOutline } from 'ionicons/icons';
     IonHeader, IonToolbar, IonTitle, IonContent, IonButton, 
     IonButtons, IonIcon, CommonModule, IonList, IonRadioGroup,
     IonItem, IonLabel, IonRadio, IonCheckbox, IonInput,
-    FormsModule
+    FormsModule, IonFooter
   ]
 })
 export class OrderPaymentComponent  implements OnInit {

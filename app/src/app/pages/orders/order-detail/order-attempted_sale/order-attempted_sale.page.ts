@@ -3,8 +3,13 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { 
   IonHeader, IonToolbar, IonTitle, IonContent, IonButton, 
-  IonButtons, IonList, IonItem, IonLabel, IonInput, IonIcon, 
-  IonSpinner
+  IonButtons,IonInput, IonIcon, IonSpinner, IonFooter,
+  IonList,
+  IonCard,
+  IonCardContent,
+  IonRow,
+  IonCol,
+  IonBadge
 } from '@ionic/angular/standalone';
 import { ProductService } from '../../../../services/product';
 import { addIcons } from 'ionicons';
@@ -14,11 +19,12 @@ import { ModalController } from '@ionic/angular/standalone';
 @Component({
   selector: 'app-order-attempted-sale',
   templateUrl: './order-attempted_sale.page.html',
+  styleUrls: ['./order-attempted_sale.page.scss'],
   standalone: true,
   imports: [
     IonHeader, IonToolbar, IonTitle, IonContent, IonButton, 
-    IonButtons, IonList, IonItem, IonLabel, IonInput, 
-    IonIcon, CommonModule, FormsModule, IonSpinner
+    IonButtons, IonInput, IonIcon, CommonModule, FormsModule, 
+    IonSpinner, IonFooter, IonCard
   ]
 })
 export class OrderAttemptedSaleComponent implements OnInit {

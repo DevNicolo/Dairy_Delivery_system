@@ -1,124 +1,122 @@
-<ion-header [translucent]="true">
+<ion-header class="ion-no-border" [translucent]="true">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/orders"></ion-back-button>
+      <ion-back-button defaultHref="/orders" color="primary"></ion-back-button>
     </ion-buttons>
-    <ion-title>Dettagli ordine #{{ order?.name }}</ion-title>
+    <ion-title class="ion-text-center">Dettagli #{{ order?.name }}</ion-title>
+
+    <ion-buttons slot="end">
+      <div style="width: 48px;"></div>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Ordine {{ order?.name }}</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
+<ion-content [fullscreen]="true" class="page-background">
   @if (order) {
-    <!-- Client Information Section -->
-    <ion-card color="light">
-      <ion-card-header>
-        <ion-card-subtitle>Cliente</ion-card-subtitle>
-        <ion-card-title>{{ order.partner_id }}</ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        <ion-item lines="none" class="ion-no-padding">
-          <ion-icon name="calendar-outline" slot="start"></ion-icon>
-          <ion-label>
-            <p>Data e Ora</p>
-            <h3>{{ order.date_order }}</h3>
-          </ion-label>
-        </ion-item>
-      </ion-card-content>
-    </ion-card>
-
-    <!-- Destination Section -->
-    <ion-card>
-      <ion-card-header>
-        <ion-card-subtitle>Destinazione</ion-card-subtitle>
-      </ion-card-header>
-      <ion-card-content>
-        <div style="display: flex; align-items: flex-start; gap: 10px;">
-          <ion-icon name="location-outline" color="primary" style="font-size: 24px;"></ion-icon>
-          <div>
-            <h3 style="margin: 0; font-weight: bold;">{{ order.street }}</h3>
-            @if (order.street2) { <p style="margin: 2px 0;">{{ order.street2 }}</p> }
-            <p style="margin: 2px 0;">
-              {{ order.shipping_zip }} {{ order.shipping_city }} ({{ order.shipping_state }})
-            </p>
-            <p style="margin: 2px 0; color: gray; font-size: 0.9em;">{{ order.shipping_country }}</p>
+    <div class="ion-padding content-wrapper">
+      
+      <!-- Customer Section -->
+      <div class="detail-card">
+        <div class="card-content-flex">
+          <div class="icon-avatar">
+            <ion-icon name="person-outline"></ion-icon>
+          </div>
+          <div class="info-group">
+            <span class="label">Cliente</span>
+            <h2 class="value">{{ order.partner_id }}</h2>
           </div>
         </div>
-      </ion-card-content>
-    </ion-card>
+        <div class="divider"></div>
+        <div class="date-row">
+          <ion-icon name="calendar-outline"></ion-icon>
+          <span>{{ order.date_order }}</span>
+        </div>
+      </div>
 
-    <!-- List Header -->
-    <div class="ion-padding-horizontal">
-      <h3 style="margin-top: 20px;">Articoli</h3>
-    </div>
-
-    <!-- Scrollable Product List -->
-    <ion-list lines="full">
-      @for (item of order.products; track item.product) {
-        <ion-item>
-          <ion-label>
-            <h2 style="font-weight: 600;">{{ item.product }}</h2>
-            <p>Q.tà: {{ item.quantity }}</p>
-          </ion-label>
-          <div slot="end" class="ion-text-right">
-            <p style="font-size: 0.85em;">€ {{ item.unit_price.toFixed(2) }}</p>
-            <ion-text color="dark">
-              <b>€ {{ item.subtotal.toFixed(2) }}</b>
-            </ion-text>
+      <!-- Destination Section -->
+      <div class="detail-card">
+        <div class="card-content-flex">
+          <div class="icon-avatar location-bg">
+            <ion-icon name="location-outline"></ion-icon>
           </div>
-        </ion-item>
-      }
-    </ion-list>
-    
-    <!-- Spacer to prevent last element from being covered by footer -->
-    <div style="height: 20px;"></div>
+          <div class="info-group">
+            <span class="label">Destinazione</span>
+            <h2 class="value">{{ order.street }}</h2>
+            
+            <!-- Address details aligned below the street -->
+            <div class="address-details">
+              @if (order.street2) { <p>{{ order.street2 }}</p> }
+              <p>{{ order.shipping_zip }} {{ order.shipping_city }} ({{ order.shipping_state }})</p>
+              <p class="country">{{ order.shipping_country }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
 
+      <!-- Items Summary -->
+      <div class="section-header">
+        <h3>Riepilogo Articoli</h3>
+      </div>
+
+      <div class="products-card">
+        @for (item of order.products; track item.product) {
+          <div class="product-item">
+            <div class="product-info">
+              <h4 class="product-name">{{ item.product }}</h4>
+              <span class="product-qty">Q.tà: {{ item.quantity }} &times; € {{ item.unit_price.toFixed(2) }}</span>
+            </div>
+            <div class="product-total">
+              <span>€ {{ item.subtotal.toFixed(2) }}</span>
+            </div>
+          </div>
+        }
+      </div>
+
+      <div class="bottom-spacer"></div>
+
+    </div>
   } @else {
-    <div class="ion-text-center ion-padding" style="margin-top: 40px;">
-      <ion-spinner name="crescent" color="primary"></ion-spinner>
-      <p>Loading Details...</p>
+    <div class="state-container">
+      <ion-spinner name="crescent" color="primary" class="custom-spinner"></ion-spinner>
+      <p class="state-subtitle">Caricamento dettagli...</p>
     </div>
   }
 </ion-content>
 
 <!-- FIXED FOOTER WITH TOTAL AND ACTIONS -->
-@if (order) {
-  <ion-footer [translucent]="true">
-    <ion-card color="primary" class="ion-no-margin" style="border-radius: 20px 20px 0 0;">
-      <ion-card-content>
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-          <h2 style="margin: 0; color: white; font-size: 1.1em;">ORDER TOTAL</h2>
-          <h1 style="margin: 0; color: white; font-weight: bold;">
-            € {{ order.total.toFixed(2) }}
-          </h1>
-        </div>
+<ion-footer class="ion-no-border bottom-footer">
+  @if (order) {
+    <div class="footer-content">
+      
+      <div class="total-row">
+        <span class="total-label">Totale Ordine</span>
+        <span class="total-amount">€ {{ order.total.toFixed(2) }}</span>
+      </div>
 
-          <ion-button *ngIf="(deliveryStatus === 'draft' || deliveryStatus === 'confirmed' || deliveryStatus === 'assigned')" expand="block" fill="outline" color="light" (click)="openConfirmModal()">
-            <ion-icon name="download-outline" slot="start"></ion-icon>
-            Procedi alla conferma
-          </ion-button>
+      <!-- Conditional Buttons -->
+      <ion-button *ngIf="(deliveryStatus === 'draft' || deliveryStatus === 'confirmed' || deliveryStatus === 'assigned')" 
+                  expand="block" shape="round" class="action-btn" (click)="openConfirmModal()">
+        <ion-icon name="download-outline" slot="start"></ion-icon>
+        Procedi alla conferma
+      </ion-button>
 
-          <ion-button *ngIf="(deliveryStatus === 'done') && !invoice_id" expand="block" fill="outline" color="light" (click)="openInvoiceModal()">
-            <ion-icon name="receipt-outline" slot="start"></ion-icon>
-            Genera fattura
-          </ion-button>
+      <ion-button *ngIf="(deliveryStatus === 'done') && !invoice_id" 
+                  expand="block" shape="round" class="action-btn" (click)="openInvoiceModal()">
+        <ion-icon name="receipt-outline" slot="start"></ion-icon>
+        Genera fattura
+      </ion-button>
 
-          <ion-button *ngIf="invoice_id && paymentStatus !== 'paid'" [disabled]="!invoice_id" expand="block" fill="outline" color="light" (click)="openPaymentModal()">
-            <ion-icon name="cash-outline" slot="start"></ion-icon>
-            Effettua pagamento
-          </ion-button>          
+      <ion-button *ngIf="invoice_id && paymentStatus !== 'paid'" 
+                  [disabled]="!invoice_id" expand="block" shape="round" class="action-btn" (click)="openPaymentModal()">
+        <ion-icon name="cash-outline" slot="start"></ion-icon>
+        Effettua pagamento
+      </ion-button>          
 
-          <div *ngIf="paymentStatus === 'paid'" class="ion-text-center ion-margin-top">
-            <ion-icon name="checkmark-circle-outline" color="success" style="font-size: 24px;"></ion-icon>
-            <p style="margin: 5px 0; color: green; font-weight: bold;">Ordine completato e pagamento effettuato</p>
-          </div>
+      <div *ngIf="paymentStatus === 'paid'" class="success-status">
+        <ion-icon name="checkmark-circle"></ion-icon>
+        <p>Ordine completato e pagamento effettuato</p>
+      </div>
 
-      </ion-card-content>
-    </ion-card>
-  </ion-footer>
-}
+    </div>
+  }
+</ion-footer>

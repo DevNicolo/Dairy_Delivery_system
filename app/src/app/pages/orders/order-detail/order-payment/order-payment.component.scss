@@ -1,0 +1,125 @@
+.page-bg {
+  --background: rgba(128, 128, 128, 0.05);
+}
+
+.bg-transparent {
+  background: transparent;
+  --background: transparent;
+}
+
+.summary-section {
+  text-align: center;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+
+  .summary-subtitle {
+    color: gray;
+    margin: 0 0 8px 0;
+    font-size: 1.05rem;
+  }
+
+  .summary-total {
+    font-size: 2.8rem;
+    font-weight: 800;
+    margin: 0;
+  }
+
+  .summary-residual {
+    color: var(--ion-color-danger);
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-top: 12px;
+  }
+}
+
+.payment-section {
+  margin-bottom: 1.5rem;
+
+  .section-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+    padding-left: 4px;
+  }
+
+  .payment-card {
+    --background: rgba(128, 128, 128, 0.05);
+    --border-radius: 16px;
+    --padding-start: 12px;
+    margin-bottom: 12px;
+    border: 2px solid transparent;
+    transition: all 0.2s ease;
+
+    &.selected {
+      border-color: var(--ion-color-warning);
+      --background: rgba(var(--ion-color-warning-rgb, 255, 196, 9), 0.1);
+    }
+
+    .icon-box {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: rgba(128, 128, 128, 0.1);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-right: 12px;
+      
+      ion-icon {
+        font-size: 1.4rem;
+        color: var(--icon-color);
+      }
+    }
+
+    .payment-label {
+      font-weight: 600;
+      font-size: 1.05rem;
+    }
+
+    ion-radio {
+      --color-checked: var(--ion-color-warning);
+    }
+  }
+}
+
+.amount-card {
+  background: rgba(var(--ion-color-warning-rgb, 255, 196, 9), 0.15);
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 16px;
+  border: 1px solid rgba(var(--ion-color-warning-rgb, 255, 196, 9), 0.3);
+
+  ion-checkbox {
+    font-weight: 600;
+  }
+
+  .amount-input-wrapper {
+    display: flex;
+    align-items: center;
+    background: var(--ion-background-color, #ffffff);
+    border-radius: 12px;
+    margin-top: 12px;
+    padding: 8px 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+
+    .currency-symbol {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: gray;
+      margin-right: 12px;
+    }
+
+    .amount-input {
+      font-size: 1.5rem;
+      font-weight: 800;
+      --padding-start: 0;
+    }
+  }
+}
+
+.action-btn {
+  height: 54px;
+  font-weight: bold;
+  font-size: 1.1em;
+  margin-top: 10px;
+}
