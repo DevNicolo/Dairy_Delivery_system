@@ -46,6 +46,13 @@ class OrderListAPI(http.Controller):
                         'unit_price': line.price_unit,
                         'subtotal': line.price_subtotal,
                     })
+                    
+                    order_sudo = o.sudo()
+                    invoices = order_sudo.invoice_ids
+                
+                    # Prendiamo la prima fattura utile (se esiste) per evitare errori "Singleton"
+                    first_invoice = invoices[0] if invoices else False
+                    payment_state = first_invoice.payment_state if first_invoice else 'no_invoice'
 
                 result.append({
                     'order_id': o.id,
@@ -62,7 +69,7 @@ class OrderListAPI(http.Controller):
                     'vehicle_id': o.vehicle_id.name,
                     'products': linee_prodotti,
                     'total': o.amount_total,
-
+                    'payment_state': payment_state
                 })
                 
             return{

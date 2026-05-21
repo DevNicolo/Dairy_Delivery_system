@@ -29,11 +29,22 @@
           <ion-card class="order-card">
             <ion-card-header class="order-header">
               <div class="header-content">
-                <ion-card-title class="order-title">#{{ order.name }}</ion-card-title>
+                
+                <div class="title-group">
+                  <ion-card-title class="order-title">#{{ order.name }}</ion-card-title>
+                  
+                  @if (order.badge) {
+                    <span class="status-badge" [ngClass]="order.badge.cssClass">
+                      {{ order.badge.label }}
+                    </span>
+                  }
+                </div>
+
                 <div class="order-date">
                   <ion-icon name="calendar-outline"></ion-icon>
                   <span>{{ order.date_order }}</span>
                 </div>
+                
               </div>
             </ion-card-header>
 

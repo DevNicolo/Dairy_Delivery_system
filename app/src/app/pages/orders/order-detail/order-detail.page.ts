@@ -28,103 +28,101 @@ export class OrderDetailPage implements OnInit {
   private orderService = inject(OrderService);
   private invoceService = inject(InvoiceService);
   private paymentService = inject(PaymentService);
+  private modalController = inject(ModalController);
+
   public order_id: string | null = null;
   public order: any;
   public invoice: any;
   public invoice_id: number | null = null;
+  
+  public deliveryStatus: string = 'unknown';
+  public paymentStatus: string = 'unknown';
+  public paymentAmountResidual: number = 0;
+
+  // Global flag to prevent UI glitches during data fetching
+  public isCheckingStatus: boolean = true;
 
   constructor() { 
     addIcons({ calendarOutline, locationOutline, downloadOutline, receiptOutline, cashOutline, checkmarkCircle })
   }
 
   ngOnInit() {
-    this.order_id = this.route.snapshot.paramMap.get('order_id'); // retrieving the order_id parameter from the route to display the details of the selected order
-    this.loadOrder();
-    this.loadInvoice();
+    this.order_id = this.route.snapshot.paramMap.get('order_id');
+    this.reloadAllData();
   }
 
-  loadOrder() {
-    console.log('Loading order with ID:', this.order_id);
-    if (this.order_id) {
-      this.orderService.getOrderById(parseInt(this.order_id)).subscribe({
-        next: (response) => {
-          console.log('success:', response);
-          const [singleOrder] = response.result.orders; // using destructuring to extract the order from the array
-          this.order = singleOrder; // saving the data that arrives
-          //check invoice status after order is loaded
-          this.loadInvoice();
-          //check delivery status after order is loaded
-          this.checkDeliveryStatus();
-          //check payment status after order is loaded
-          this.checkPaymentStatus();
-        },
-      error: (error) => {
-        console.error('error:', error);
+  /**
+   * Master method to fetch all required order data sequentially.
+   * This ensures the UI is perfectly synced and avoids flickering buttons.
+   */
+  reloadAllData() {
+    if (!this.order_id) return;
+    
+    // Lock the UI
+    this.isCheckingStatus = true; 
+    const id = parseInt(this.order_id);
+
+    // 1. Fetch Order
+    this.orderService.getOrderById(id).subscribe({
+      next: (orderRes) => {
+        const [singleOrder] = orderRes.result.orders;
+        this.order = singleOrder;
+        
+        // 2. Fetch Delivery Status
+        this.orderService.getDeliveryStatus(id).subscribe({
+          next: (delRes) => {
+            this.deliveryStatus = delRes.result.picking_state;
+
+            // 3. Fetch Invoice ID
+            this.invoceService.getInvoiceId(id).subscribe({
+              next: (invRes) => {
+                this.invoice_id = invRes.result.invoice_id;
+                this.invoice = invRes.result.invoice_id;
+
+                if (this.invoice_id) {
+                  // 4. If Invoice exists, fetch Payment Status
+                  this.paymentService.getPaymentStatus(this.invoice_id).subscribe({
+                    next: (payRes) => {
+                      this.paymentStatus = payRes.result.payment_status;
+                      this.paymentAmountResidual = payRes.result.amount_residual;
+                      
+                      // Sequence completed successfully
+                      this.isCheckingStatus = false; 
+                    },
+                    error: (err) => { 
+                      console.error('Error fetching payment status:', err);
+                      this.paymentStatus = 'error'; 
+                      this.isCheckingStatus = false; 
+                    }
+                  });
+                } else {
+                  // Sequence completed (no invoice)
+                  this.isCheckingStatus = false; 
+                }
+              },
+              error: (err) => { 
+                console.error('Error fetching invoice ID:', err);
+                this.isCheckingStatus = false; 
+              }
+            });
+          },
+          error: (err) => { 
+            console.error('Error fetching delivery status:', err);
+            this.deliveryStatus = 'error'; 
+            this.isCheckingStatus = false; 
+          }
+        });
+      },
+      error: (err) => { 
+        console.error('Error fetching order:', err);
+        this.isCheckingStatus = false; 
       }
-      });
-    }
+    });
   }
 
-  loadInvoice() {
-    if (this.order_id) {
-      this.invoceService.getInvoiceId(parseInt(this.order_id)).subscribe({
-        next: (response) => {
-          console.log('Invoice ID response:', response);
-          this.invoice = response.result.invoice_id;
-          this.invoice_id = response.result.invoice_id;
-        },
-        error: (error) => {
-          console.error('Error fetching invoice ID:', error);
-        }
-      });
-    }
-  }
-
-  // button logic based on delivery status
-
-  deliveryStatus: string = 'unknown';
-
-  checkDeliveryStatus() {
-    if (this.order_id) {
-      this.orderService.getDeliveryStatus(parseInt(this.order_id)).subscribe({
-        next: (response) => {
-          console.log('Delivery status response:', response);
-          this.deliveryStatus = response.result.picking_state;
-        },
-        error: (error) => {
-          console.error('Error fetching delivery status:', error);
-          this.deliveryStatus = 'error';
-        }
-      });
-    }
-  }
-
-  paymentStatus: string = 'unknown';
-  paymentAmountResidual: number = 0;
-  
-  checkPaymentStatus() {
-    if (this.invoice_id) {
-      this.paymentService.getPaymentStatus(this.invoice_id).subscribe({
-        next: (response) => {
-          console.log('Payment status response:', response);
-          this.paymentStatus = response.result.payment_status;
-          this.paymentAmountResidual = response.result.amount_residual;
-        },
-        error: (error) => {
-          console.error('Error fetching payment status:', error);
-          this.paymentStatus = 'error';
-        }
-      });
-    }
-  }
-
-
-  private modalController = inject(ModalController);
-
-  // modal flow
+  // --- MODAL FLOW ---
 
   async openConfirmModal() {
-    // open the first popup (attempted sale)
     const attempted_sale_modal = await this.modalController.create({
       component: OrderAttemptedSaleComponent,
       componentProps: { orderName: this.order?.name },
@@ -133,27 +131,28 @@ export class OrderDetailPage implements OnInit {
     });
 
     await attempted_sale_modal.present();
-
     const { data, role } = await attempted_sale_modal.onWillDismiss();
 
     if (role === 'confirm' && data?.selection) {
-      // add products
+      this.isCheckingStatus = true; // Lock UI during API calls
+
       this.orderService.addProductsToOrder(parseInt(this.order_id!), data.selection).subscribe({
         next: (resAdd) => {
-          console.log('Prodotti aggiunti:', resAdd);
-
-          // confirm order
           this.orderService.confirmOrder(parseInt(this.order_id!)).subscribe({
             next: (resConfirm) => {
-              console.log('Ordine confermato definitivamente:', resConfirm);
-
-              // open invoice modal
+              // Open invoice modal sequentially
               this.openInvoiceModal();
             },
-            error: (err) => console.error('Errore conferma ordine:', err)
+            error: (err) => {
+              console.error('Error confirming order:', err);
+              this.reloadAllData(); // Unlock UI on error
+            }
           });
         },
-        error: (err) => console.error('Errore aggiunta prodotti:', err)
+        error: (err) => {
+          console.error('Error adding products:', err);
+          this.reloadAllData(); // Unlock UI on error
+        }
       });
     }
   }
@@ -161,28 +160,47 @@ export class OrderDetailPage implements OnInit {
   async openInvoiceModal() {
     const invoice_modal = await this.modalController.create({
       component: OrderInvoiceCreateComponent,
-      componentProps: { 
-        orderName: this.order?.name,
-      },
+      componentProps: { orderName: this.order?.name },
       breakpoints: [0, 0.5, 1],
       initialBreakpoint: 0.5
     });
 
     await invoice_modal.present();
-
     const { data, role } = await invoice_modal.onWillDismiss();
 
     if (role === 'confirm' && data?.generateInvoice) {
+      this.isCheckingStatus = true; // Lock UI during API calls
+
       this.invoceService.createInvoice(parseInt(this.order_id!)).subscribe({
         next: (res) => {
-          console.log('Fattura creata:', res);
-          this.openPaymentModal(); // open payment modal after invoice creation
-          this.loadOrder(); // reload order to update the invoice status
+          // Re-fetch data to get the new invoice_id, then trigger payment modal automatically
+          // We use a custom fetch sequence here instead of reloadAllData to avoid unlocking the UI too early
+          this.invoceService.getInvoiceId(parseInt(this.order_id!)).subscribe({
+            next: (invRes) => {
+              this.invoice_id = invRes.result.invoice_id;
+              
+              if (this.invoice_id) {
+                this.paymentService.getPaymentStatus(this.invoice_id).subscribe({
+                  next: (payRes) => {
+                    this.paymentAmountResidual = payRes.result.amount_residual;
+                    this.isCheckingStatus = false; // Unlock UI right before opening next modal
+                    this.openPaymentModal(); 
+                  }
+                });
+              } else {
+                this.reloadAllData();
+              }
+            }
+          });
         },
-        error: (err) => console.error('Errore creazione fattura:', err)
+        error: (err) => {
+          console.error('Error creating invoice:', err);
+          this.reloadAllData();
+        }
       });
+    } else {
+      this.reloadAllData(); 
     }
-    else this.loadOrder(); // if the user cancels the second popup, we reload the order to reset any changes done from the first popup
   }
 
   async openPaymentModal() {
@@ -198,19 +216,22 @@ export class OrderDetailPage implements OnInit {
     });
 
     await payment_modal.present();
-
     const { data, role } = await payment_modal.onWillDismiss();
 
     if (role === 'confirm' && data?.generatePayment) {
+      this.isCheckingStatus = true; // Lock UI during API calls
+
       this.paymentService.confirmPayment(this.invoice_id!, data.paymentMethod, data.amount).subscribe({
         next: (res) => {
-          console.log('Pagamento confermato:', res);
-          this.loadOrder(); // reload order to update the payment status
+          this.reloadAllData(); // Reload completely to show success status
         },
-        error: (err) => console.error('Errore conferma pagamento:', err)
+        error: (err) => {
+          console.error('Error confirming payment:', err);
+          this.reloadAllData();
+        }
       });
-      console.log('Generazione pagamento richiesta');
+    } else {
+      this.reloadAllData(); 
     }
-    else this.loadOrder(); // if the user cancels the payment popup, we reload the order to reset any changes done from the previous popups 
   }
 }

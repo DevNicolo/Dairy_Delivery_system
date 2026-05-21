@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { IonHeader, IonToolbar, IonButtons, IonMenuButton, IonTitle, IonContent, IonSpinner, IonList, IonItem, IonLabel, IonNote, IonBadge, IonIcon, IonText } from '@ionic/angular/standalone';
+import { IonHeader, IonToolbar, IonButtons, IonMenuButton, IonTitle, IonContent, IonSpinner, IonIcon } from '@ionic/angular/standalone';
 
 import { ProductService } from '../../services/product';
 import { CommonModule } from '@angular/common';
@@ -9,7 +9,7 @@ import { CommonModule } from '@angular/common';
   selector: 'app-warehouse',
   templateUrl: './warehouse.page.html',
   styleUrls: ['./warehouse.page.scss'],
-  imports: [CommonModule, IonHeader, IonToolbar, IonButtons, IonMenuButton, IonTitle, IonContent, IonSpinner, IonList, IonItem, IonLabel, IonNote, IonBadge, IonIcon, IonText],
+  imports: [CommonModule, IonHeader, IonToolbar, IonButtons, IonMenuButton, IonTitle, IonContent, IonSpinner, IonIcon],
 })
 export class WarehousePage implements OnInit {
   public home!: string;

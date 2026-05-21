@@ -37,14 +37,58 @@
   .header-content {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start; // Modificato per allineare in alto titolo e badge
     border-bottom: 1px dashed #e0e0e0;
     padding-bottom: 1rem;
+
+    // Nuovo contenitore per titolo e badge
+    .title-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
 
     .order-title {
       font-size: 1.2rem;
       font-weight: 700;
       color: #222428;
+    }
+
+    // Stili del bollino
+    .status-badge {
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.3rem 0.6rem;
+      border-radius: 12px;
+      display: inline-block;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      width: fit-content;
+
+      &.status-blue {
+        background: rgba(56, 128, 255, 0.12);
+        color: #3880ff;
+      }
+      
+      &.status-orange {
+        background: rgba(255, 152, 0, 0.12);
+        color: #e68a00;
+      }
+      
+      &.status-yellow {
+        background: rgba(255, 196, 9, 0.15);
+        color: #e5b000;
+      }
+      
+      &.status-green {
+        background: rgba(45, 211, 111, 0.12);
+        color: #219653;
+      }
+
+      &.status-gray {
+        background: rgba(146, 148, 156, 0.12);
+        color: #92949c;
+      }
     }
 
     .order-date {

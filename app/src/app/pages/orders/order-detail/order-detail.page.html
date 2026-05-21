@@ -93,28 +93,37 @@
         <span class="total-amount">€ {{ order.total.toFixed(2) }}</span>
       </div>
 
-      <!-- Conditional Buttons -->
-      <ion-button *ngIf="(deliveryStatus === 'draft' || deliveryStatus === 'confirmed' || deliveryStatus === 'assigned')" 
-                  expand="block" shape="round" class="action-btn" (click)="openConfirmModal()">
-        <ion-icon name="download-outline" slot="start"></ion-icon>
-        Procedi alla conferma
-      </ion-button>
+      <!-- Se stiamo controllando lo stato, non mostro bottoni errati -->
+      <div *ngIf="isCheckingStatus" class="ion-text-center" style="padding: 15px 0;">
+        <ion-spinner name="dots" color="medium"></ion-spinner>
+      </div>
 
-      <ion-button *ngIf="(deliveryStatus === 'done') && !invoice_id" 
-                  expand="block" shape="round" class="action-btn" (click)="openInvoiceModal()">
-        <ion-icon name="receipt-outline" slot="start"></ion-icon>
-        Genera fattura
-      </ion-button>
+      <!-- Mostro le azioni solo se il controllo è finito -->
+      <div *ngIf="!isCheckingStatus">
+        
+        <ion-button *ngIf="(deliveryStatus === 'draft' || deliveryStatus === 'confirmed' || deliveryStatus === 'assigned')" 
+                    expand="block" shape="round" class="action-btn" (click)="openConfirmModal()">
+          <ion-icon name="download-outline" slot="start"></ion-icon>
+          Procedi alla conferma
+        </ion-button>
 
-      <ion-button *ngIf="invoice_id && paymentStatus !== 'paid'" 
-                  [disabled]="!invoice_id" expand="block" shape="round" class="action-btn" (click)="openPaymentModal()">
-        <ion-icon name="cash-outline" slot="start"></ion-icon>
-        Effettua pagamento
-      </ion-button>          
+        <ion-button *ngIf="(deliveryStatus === 'done') && !invoice_id" 
+                    expand="block" shape="round" class="action-btn" (click)="openInvoiceModal()">
+          <ion-icon name="receipt-outline" slot="start"></ion-icon>
+          Genera fattura
+        </ion-button>
 
-      <div *ngIf="paymentStatus === 'paid'" class="success-status">
-        <ion-icon name="checkmark-circle"></ion-icon>
-        <p>Ordine completato e pagamento effettuato</p>
+        <ion-button *ngIf="invoice_id && paymentStatus !== 'paid'" 
+                    expand="block" shape="round" class="action-btn" (click)="openPaymentModal()">
+          <ion-icon name="cash-outline" slot="start"></ion-icon>
+          Effettua pagamento
+        </ion-button>          
+
+        <div *ngIf="paymentStatus === 'paid'" class="success-status">
+          <ion-icon name="checkmark-circle"></ion-icon>
+          <p>Ordine completato e pagamento effettuato</p>
+        </div>
+
       </div>
 
     </div>
