@@ -13,6 +13,7 @@ import { OrderInvoiceCreateComponent } from './order-invoice-create/order-invoic
 import { InvoiceService } from '../../../services/invoice';
 import { OrderPaymentComponent } from './order-payment/order-payment.component';
 import { PaymentService } from '../../../services/payment';
+import { OrderFailureModalComponent } from './order-failure-modal/order-failure-modal.component';
 
 @Component({
   selector: 'app-order-detail',
@@ -145,13 +146,13 @@ export class OrderDetailPage implements OnInit {
             },
             error: (err) => {
               console.error('Error confirming order:', err);
-              this.reloadAllData(); // Unlock UI on error
+              this.openFailureModal(); // Show failure modal on error
             }
           });
         },
         error: (err) => {
           console.error('Error adding products:', err);
-          this.reloadAllData(); // Unlock UI on error
+          this.openFailureModal(); // Show failure modal on error
         }
       });
     }
@@ -195,7 +196,7 @@ export class OrderDetailPage implements OnInit {
         },
         error: (err) => {
           console.error('Error creating invoice:', err);
-          this.reloadAllData();
+          this.openFailureModal(); // Show failure modal on error
         }
       });
     } else {
@@ -227,10 +228,25 @@ export class OrderDetailPage implements OnInit {
         },
         error: (err) => {
           console.error('Error confirming payment:', err);
-          this.reloadAllData();
+          this.openFailureModal(); // Show failure modal on error
         }
       });
     } else {
+      this.reloadAllData(); 
+    }
+  }
+
+  async openFailureModal() {
+    const failure_modal = await this.modalController.create({
+      component: OrderFailureModalComponent,
+      breakpoints: [0, 0.5, 1],
+      initialBreakpoint: 0.5
+    });
+
+    await failure_modal.present();
+    const { data, role } = await failure_modal.onWillDismiss();
+
+    if (role === 'confirm' && data?.confirmed) {
       this.reloadAllData(); 
     }
   }

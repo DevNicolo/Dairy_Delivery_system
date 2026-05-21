@@ -1,0 +1,42 @@
+.page-bg {
+  --background: #f8f9fa; 
+}
+
+.failure-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-top: 4rem;
+  margin-bottom: 2.5rem;
+
+  .icon-wrapper {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background: rgba(var(--ion-color-danger-rgb, 235, 68, 90), 0.15);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1.5rem;
+
+    ion-icon {
+      font-size: 4.5rem;
+    }
+  }
+
+  .main-title {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #222428;
+    margin: 0 0 0.8rem 0;
+  }
+
+  .sub-title {
+    font-size: 1.05rem;
+    color: #666666;
+    margin: 0;
+    line-height: 1.5;
+    padding: 0 15px;
+  }
+}

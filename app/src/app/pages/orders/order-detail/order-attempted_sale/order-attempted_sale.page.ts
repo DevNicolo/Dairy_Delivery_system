@@ -4,12 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { 
   IonHeader, IonToolbar, IonTitle, IonContent, IonButton, 
   IonButtons,IonInput, IonIcon, IonSpinner, IonFooter,
-  IonList,
   IonCard,
-  IonCardContent,
-  IonRow,
-  IonCol,
-  IonBadge
 } from '@ionic/angular/standalone';
 import { ProductService } from '../../../../services/product';
 import { addIcons } from 'ionicons';

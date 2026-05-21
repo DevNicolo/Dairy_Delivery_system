@@ -1,0 +1,26 @@
+<ion-header class="ion-no-border" [translucent]="true">
+  <ion-toolbar>
+    <ion-title class="ion-text-center">Errore</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="cancel()" color="medium" style="font-weight: 600;">Chiudi</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding page-bg">
+  <div class="failure-hero">
+    <div class="icon-wrapper">
+      <ion-icon name="close-outline" color="danger"></ion-icon>
+    </div>
+    <h2 class="main-title">Ops! Qualcosa è andato storto</h2>
+    <p class="sub-title">L'operazione non è andata a buon fine. Ti preghiamo di riprovare.</p>
+  </div>
+</ion-content>
+
+<ion-footer class="ion-no-border">
+  <ion-toolbar class="ion-padding-horizontal ion-padding-bottom" style="--background: transparent;">
+    <ion-button expand="block" shape="round" color="danger" (click)="cancel()" style="height: 54px; font-weight: bold; font-size: 1.1em; margin-top: 10px;">
+      Chiudi
+    </ion-button>
+  </ion-toolbar>
+</ion-footer>
