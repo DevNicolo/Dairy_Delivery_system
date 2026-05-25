@@ -34,7 +34,9 @@ export class OrderPaymentComponent  implements OnInit {
     addIcons({ cashOutline, cardOutline, businessOutline });
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.checkAmount();
+  }
 
   private modalCtrl = inject(ModalController);
 
@@ -67,6 +69,13 @@ export class OrderPaymentComponent  implements OnInit {
     // Ensure we don't exceed the residual amount    
     if (this.amountPaid > this.amountResidual) {
       this.amountPaid = this.amountResidual;
+    }
+  }
+
+  checkAmount(){
+    if (this.amountResidual > this.orderTotal) {
+      this.orderTotal = this.amountResidual;
+      this.isFullPayment = true;
     }
   }
   

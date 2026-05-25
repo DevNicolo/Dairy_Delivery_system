@@ -32,6 +32,11 @@ export class OrdersPage implements OnInit {
     this.loadOrders();
   }
 
+  // Refresh orders every time the view is entered (back from details or other page)
+  ionViewWillEnter() {
+    this.loadOrders();
+  }
+
   loadOrders() {
     this.orderService.getAllOrders().subscribe({
       next: (response) => {
