@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_quant_package_form_qrcode_omax" model="ir.ui.view">
+            <field name="name">stock.quant.package.form.qrcode.omax</field>
+            <field name="model">stock.quant.package</field>
+            <field name="inherit_id" ref="stock.view_quant_package_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[hasclass('oe_title')]" position="before">
+                    <field name="qrcode_image" widget="image" class="oe_avatar" style="margin-right:350px;"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

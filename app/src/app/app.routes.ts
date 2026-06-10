@@ -30,5 +30,9 @@ export const routes: Routes = [
     path: 'order-detail/:order_id', // page is dynamic and receives the order_id as a parameter to display the details of the selected order
     loadComponent: () => import('./pages/orders/order-detail/order-detail.page').then( m => m.OrderDetailPage)
   },
+  {
+    path: 'order-check/:order_id', // page is dynamic and receives the order_id as a parameter to display the details of the selected order
+    loadComponent: () => import('./pages/orders/order-check/order-check.page').then( m => m.OrderCheckPage)
+  },
 
 ];
