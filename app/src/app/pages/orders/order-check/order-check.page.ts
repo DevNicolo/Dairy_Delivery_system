@@ -142,6 +142,7 @@ export class OrderCheckPage implements OnInit {
 
   completeCheck() {
     if (this.isAllCompleted()) {
+      localStorage.setItem(`order_finalized_${this.orderId}`, 'true');
       this.router.navigate(['/orders']);
     } else {
       alert("Non hai verificato tutti i prodotti");

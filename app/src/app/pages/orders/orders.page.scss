@@ -3,6 +3,18 @@
   --background: #f8f9fa;
 }
 
+.btn-light-red {
+  --background: #ffebee;
+  --color: #d32f2f;
+  --box-shadow: none;
+}
+
+.btn-light-green {
+  --background: #e8f5e9;
+  --color: #2e7d32;
+  --box-shadow: none;
+}
+
 // Intestazione Pagina
 .page-header {
   margin-bottom: 1.5rem;

@@ -81,10 +81,11 @@
                 </div>
               </div>
 
-              <ion-button expand="block" shape="round" class="detail-btn" routerLink="/order-detail/{{ order.order_id }}" fill="outline">
+              <ion-button expand="block" shape="round" class="detail-btn" routerLink="/order-detail/{{ order.order_id }}" fill="outline" [disabled]="!order.isLoaded">
                 Vedi Dettagli
               </ion-button>
-              <ion-button expand="block" shape="round" class="detail-btn" routerLink="/order-check/{{ order.order_id }}" fill="outline">
+              <ion-button expand="block" shape="round" class="detail-btn" routerLink="/order-check/{{ order.order_id }}" fill="solid"
+                          [ngClass]="order.isLoaded ? 'btn-light-green' : 'btn-light-red'">
                 Carica Prodotti
               </ion-button>
             </ion-card-content>

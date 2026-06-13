@@ -46,6 +46,7 @@ export class OrdersPage implements OnInit {
         // Calculate the badges for each order as soon as they arrive
         this.orders.forEach((order: any) => {
           this.calculateBadge(order);
+          order.isLoaded = localStorage.getItem(`order_finalized_${order.order_id}`) === 'true';
         });
       },
       error: (error) => {
