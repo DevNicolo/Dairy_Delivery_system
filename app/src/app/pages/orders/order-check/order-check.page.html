@@ -1,13 +1,93 @@
-<ion-header [translucent]="true">
+<ion-header class="ion-no-border" [translucent]="true">
   <ion-toolbar>
-    <ion-title>order-check</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/orders" color="primary"></ion-back-button>
+    </ion-buttons>
+    <ion-title class="ion-text-center">Carico Ordine</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">order-check</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content [fullscreen]="true" class="page-background">
+  @if (order) {
+    <div class="ion-padding content-wrapper">
+      
+      <!-- Order Header Section -->
+      <div class="detail-card">
+        <div class="card-content-flex" style="align-items: center; justify-content: space-between;">
+          <div style="display: flex; align-items: center; gap: 16px;">
+            <div class="icon-avatar">
+              <ion-icon name="cube-outline"></ion-icon>
+            </div>
+            <div class="info-group">
+              <span class="label">Ordine di Vendita</span>
+              <h2 class="value" style="display: flex; align-items: center; gap: 8px;">
+                {{ orderName }}
+                <ion-icon *ngIf="isOrderVerified" name="checkmark-circle" color="success" style="font-size: 24px;"></ion-icon>
+              </h2>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-header">
+        <h3>Lista Prodotti da Caricare</h3>
+      </div>
+
+      <div class="products-card">
+        @for (item of order.products; track item.product) {
+          <div class="product-item">
+            <div class="product-info">
+              <h4 class="product-name">{{ item.product }}</h4>
+              <span class="product-qty">Richiesti: {{ item.quantity }}</span>
+            </div>
+            
+            <div class="product-total" style="display: flex; align-items: center; gap: 8px;">
+              <!-- Non caricato -->
+              <ion-icon *ngIf="scannedQuantities[item.product] === 0" name="close-circle" color="danger" style="font-size: 24px;"></ion-icon>
+              
+              <!-- Caricato parzialmente -->
+              <span *ngIf="scannedQuantities[item.product] > 0 && scannedQuantities[item.product] < item.quantity" style="font-weight: 700; color: #ff9800; font-size: 1.1rem;">
+                {{ scannedQuantities[item.product] }} / {{ item.quantity }}
+              </span>
+              
+              <!-- Caricato completamente -->
+              <ion-icon *ngIf="scannedQuantities[item.product] >= item.quantity && item.quantity > 0" name="checkmark-circle" color="success" style="font-size: 24px;"></ion-icon>
+            </div>
+          </div>
+        }
+      </div>
+
+      <div class="bottom-spacer" style="height: 120px;"></div>
+      
+    </div>
+
+    <!-- Pulsante Fluttuante (FAB) per la Scansione -->
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed" style="margin-bottom: 20px; margin-right: 10px;">
+      <ion-fab-button color="primary" (click)="startScan()">
+        <ion-icon name="scan-outline"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+
+  } @else {
+    <div class="state-container">
+      <ion-spinner name="crescent" color="primary" class="custom-spinner"></ion-spinner>
+      <p class="state-subtitle">Caricamento ordine...</p>
+    </div>
+  }
 </ion-content>
+
+<!-- FIXED FOOTER: Sempre visibile ma con stato condizionale -->
+<ion-footer class="ion-no-border bottom-footer">
+  <div class="footer-content">
+    <ion-button 
+      expand="block" 
+      shape="round" 
+      class="action-btn" 
+      [color]="isAllCompleted() ? 'success' : 'danger'" 
+      [ngClass]="{'disabled-look': !isAllCompleted()}"
+      (click)="completeCheck()">
+      <ion-icon name="checkmark-done-outline" slot="start"></ion-icon>
+      Ordine completato
+    </ion-button>
+  </div>
+</ion-footer>
