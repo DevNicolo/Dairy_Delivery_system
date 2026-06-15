@@ -6,3 +6,4 @@ from . import invoice_create
 from . import payment_confirm
 from . import session_check
 from . import userinfo_get
+from . import truck_load

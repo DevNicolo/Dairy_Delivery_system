@@ -11,6 +11,7 @@ const endpoint_vehicle = '/get_daily_vehicle';
 const endpoint_add_products = '/add_products';
 const endpoint_confirm_order = '/post_confirm_order';
 const endpoint_delivery_status = '/get_delivery_status';
+const endpoint_truck_package_load = '/confirm_truck_package_load';
 
 @Injectable({
   providedIn: 'root'
@@ -150,6 +151,29 @@ export class OrderService {
 
     const options = {
       url: `${environment.baseUrl}${endpoint_delivery_status}`,
+
+      headers: { 
+      'Content-Type': `${environment.type}`,
+      'Authorization': `${environment.odooToken}${this.userToken}` 
+      },
+
+      data: {
+        jsonrpc: `${environment.jsonrpc}`,
+        method: `${environment.method}`,
+        params: {
+          order_id: order_id
+        },
+        id: `${environment.id}`
+      }
+    };
+
+    return this.response(options);
+  }
+
+  confirmTruckPackageLoad(order_id: number): Observable<any> {
+
+    const options = {
+      url: `${environment.baseUrl}${endpoint_truck_package_load}`,
 
       headers: { 
       'Content-Type': `${environment.type}`,

@@ -142,8 +142,7 @@ export class OrderCheckPage implements OnInit {
 
   completeCheck() {
     if (this.isAllCompleted()) {
-      localStorage.setItem(`order_finalized_${this.orderId}`, 'true');
-      this.router.navigate(['/orders']);
+      this.confirmTruckPackageLoad();
     } else {
       alert("Non hai verificato tutti i prodotti");
     }
@@ -152,5 +151,25 @@ export class OrderCheckPage implements OnInit {
   async requestPermissions(): Promise<boolean> {
     const { camera } = await BarcodeScanner.requestPermissions();
     return camera === 'granted' || camera === 'limited';
+  }
+
+
+  confirmTruckPackageLoad() {
+    if (!this.orderId) return;
+
+    this.orderService.confirmTruckPackageLoad(parseInt(this.orderId)).subscribe({
+      next: (res) => {
+        if (res.result && res.result.status === 'success') {
+          localStorage.setItem(`order_finalized_${this.orderId}`, 'true');
+          this.router.navigate(['/home/orders']);
+        } else {
+          alert("Errore durante la conferma del carico del pacco del camion.");
+        }
+      },
+      error: (err) => {
+        console.error('Errore durante la conferma del carico del pacco del camion:', err);
+        alert("Errore durante la conferma del carico del pacco del camion.");
+      }
+    });
   }
 }

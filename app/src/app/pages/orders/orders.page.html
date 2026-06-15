@@ -85,7 +85,8 @@
                 Vedi Dettagli
               </ion-button>
               <ion-button expand="block" shape="round" class="detail-btn" routerLink="/order-check/{{ order.order_id }}" fill="solid"
-                          [ngClass]="order.isLoaded ? 'btn-light-green' : 'btn-light-red'">
+                          [ngClass]="order.isLoaded ? 'btn-light-green' : 'btn-light-red'"
+                          [disabled]="order.isLoaded">
                 Carica Prodotti
               </ion-button>
             </ion-card-content>
